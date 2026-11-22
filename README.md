@@ -26,7 +26,7 @@ Die UID-Spalte dient ausschließlich der Zuordnung. Jede JSON-Datei enthält pas
 - Grafana 13.3.x mit den eingebauten Paneltypen; Ordnerhierarchie benötigt verschachtelte Ordner. Andere Versionen wurden mit diesem Export nicht geprüft.
 - Prometheus: vorhandene Host-/Telegraf-Metriken, Monitoring-Regeln und UniFi-Poller-Metriken. Statische Job- und Rollenlabels sind Teil der Abfragekonfiguration.
 - Loki liefert strukturierte Journal-, Sicherheits- und Verbindungsereignisse (`connection_snapshot`), UniFi-CEF (`unifi_cef`) und bereinigtes Syslog für ASUS und TP-Link. Parser und Logsammler sind eigene Komponenten.
-- Die TP-Link-Portübersicht benötigt die Prometheus-Metriken `tplink_sx3008f_*` eines SNMPv3-Sammlers. Die Abfragen verwenden das Label `index`. Falls der Switch andere IF-MIB-Indizes meldet, passe die Zuordnung der Portnamen im Dashboard an.
+- Die [Einrichtung für TP-Link SX3008F](docs/tp-link-sx3008f.md) beschreibt SNMPv3, die Telegraf-Beispielkonfiguration, Prometheus und den Grafana-Import.
 - InfluxDB: die in den Abfragen verwendeten Messungen, Felder und Bucketnamen müssen im eigenen System vorhanden sein. Erforderliche Rechte der Datenquellen: Lesen.
 - Netzwerkübersichten zählen teils wiederholte Sichtungen. Fehlende Daten sind keine gesunde Null. Beschreibungen der einzelnen Panels beachten.
 - Grafana-Benutzer, Rechte, anonyme Freigaben, Zertifikate, Alarmregeln und Export-/Empfangsdienste werden nicht importiert. Der Zugriff wird im eigenen Grafana eingerichtet.
@@ -48,7 +48,7 @@ Benannte Anpassungen ohne ursprüngliche private Werte:
 - [Monitoring · Gesamtüberblick](dashboards/Monitoring/mon-overview.json) · `mon-overview`
 - [Proxy · Hostübersicht](dashboards/Monitoring/Proxy/mon-proxy.json) · `mon-proxy`
 - [Proxmox · Hostübersicht](dashboards/Monitoring/Proxmox/mon-pve.json) · `mon-pve`
-- [TP-Link SX3008F · Anschlüsse und System](dashboards/Monitoring/Netzwerkgeräte/mon-tplink-sx3008f.json) · `mon-tplink-sx3008f`
+- [TP-Link SX3008F · Anschlüsse und System](dashboards/Monitoring/Netzwerkgeräte/mon-tplink-sx3008f.json) · `mon-tplink-sx3008f` · [Anleitung](docs/tp-link-sx3008f.md)
 - [UniFi · Netzwerk und WLAN](dashboards/Monitoring/UniFi/mon-unifi.json) · `mon-unifi`
 - [UniFi · Geräte und System](dashboards/Monitoring/UniFi/mon-unifi-devices.json) · `mon-unifi-devices`
 - [UniFi · Systemprotokoll und Blockierungen](dashboards/Monitoring/UniFi/mon-unifi-logs.json) · `mon-unifi-logs`
