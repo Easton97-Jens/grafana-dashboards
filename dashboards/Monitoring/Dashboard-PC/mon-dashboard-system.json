@@ -1,0 +1,1563 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Dashboard-PC-Ordner",
+      "tooltip": "",
+      "type": "link",
+      "url": "/dashboards/f/mon-dashboard-folder/dashboard-pc"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Ressourcen",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-dashboard-host"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Netz und Dienste",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-dashboard-system"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Socket-Momentaufnahmen",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-connections?var-host=dashboard"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Betriebsübersicht",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-operations"
+    },
+    {
+      "title": "Dashboard-PC · Logs",
+      "type": "link",
+      "url": "/d/mon-logs?var-host=dashboard"
+    }
+  ],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 90,
+      "options": {
+        "content": "Messwerte der Netzwerkschnittstellen und Dienste. Die Socket-Ansicht zeigt Momentaufnahmen des Dashboard-PCs.",
+        "mode": "markdown"
+      },
+      "title": "Dashboard-PC · Netz und Dienste",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Empfangene und gesendete Bits pro Sekunde. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Senden"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#56A64B",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 21,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (rate(net_bytes_recv{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens18\"}[5m]) * 8)",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (rate(net_bytes_sent{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens18\"}[5m]) * 8)",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Verwaltung (ens18) · Datenverkehr",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Zunahme von Fehlern und verworfenen Paketen je 15 Minuten. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangsfehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sendefehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF9830",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#B877D9",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 22,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_err_in{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens18\"}[15m]))",
+          "instant": false,
+          "legendFormat": "Empfangsfehler",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_err_out{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens18\"}[15m]))",
+          "instant": false,
+          "legendFormat": "Sendefehler",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_drop_in{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens18\"}[15m]))",
+          "instant": false,
+          "legendFormat": "RX verworfen",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_drop_out{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens18\"}[15m]))",
+          "instant": false,
+          "legendFormat": "TX verworfen",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Verwaltung (ens18) · Paketfehler / 15 Min.",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Empfangene und gesendete Bits pro Sekunde. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Senden"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#56A64B",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 91,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (rate(net_bytes_recv{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens19\"}[5m]) * 8)",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (rate(net_bytes_sent{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens19\"}[5m]) * 8)",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Backend (ens19) · Datenverkehr",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Zunahme von Fehlern und verworfenen Paketen je 15 Minuten. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangsfehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sendefehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF9830",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#B877D9",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 92,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_err_in{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens19\"}[15m]))",
+          "instant": false,
+          "legendFormat": "Empfangsfehler",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_err_out{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens19\"}[15m]))",
+          "instant": false,
+          "legendFormat": "Sendefehler",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_drop_in{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens19\"}[15m]))",
+          "instant": false,
+          "legendFormat": "RX verworfen",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_drop_out{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"ens19\"}[15m]))",
+          "instant": false,
+          "legendFormat": "TX verworfen",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Backend (ens19) · Paketfehler / 15 Min.",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Empfangene und gesendete Bits pro Sekunde. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Senden"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#56A64B",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "id": 93,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (rate(net_bytes_recv{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"lo\"}[5m]) * 8)",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (rate(net_bytes_sent{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"lo\"}[5m]) * 8)",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Intern (lo) · Datenverkehr",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Zunahme von Fehlern und verworfenen Paketen je 15 Minuten. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangsfehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sendefehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF9830",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#B877D9",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "id": 94,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_err_in{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"lo\"}[15m]))",
+          "instant": false,
+          "legendFormat": "Empfangsfehler",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_err_out{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"lo\"}[15m]))",
+          "instant": false,
+          "legendFormat": "Sendefehler",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_drop_in{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"lo\"}[15m]))",
+          "instant": false,
+          "legendFormat": "RX verworfen",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (interface) (increase(net_drop_out{job=\"telegraf-dashboard\",host=\"dashboard\",interface=\"lo\"}[15m]))",
+          "instant": false,
+          "legendFormat": "TX verworfen",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Intern (lo) · Paketfehler / 15 Min.",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 28
+      },
+      "id": 23,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(processes_running{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": false,
+          "legendFormat": "Laufend",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(processes_sleeping{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": false,
+          "legendFormat": "Schlafend",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(processes_blocked{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": false,
+          "legendFormat": "Blockiert",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(processes_zombies{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": false,
+          "legendFormat": "Zombies",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Prozesse nach Zustand",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "Keine Daten"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "green",
+                        "text": "Aktiv"
+                      },
+                      "1": {
+                        "text": "Lädt neu"
+                      },
+                      "2": {
+                        "text": "Inaktiv"
+                      },
+                      "3": {
+                        "color": "red",
+                        "text": "Fehler"
+                      },
+                      "4": {
+                        "text": "Startet"
+                      },
+                      "5": {
+                        "text": "Stoppt"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 28
+      },
+      "id": 24,
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (name) (systemd_units_active_code{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "systemd · aktuelle Dienstzustände",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "renameByName": {
+              "Value": "Status",
+              "name": "Dienst"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 36
+      },
+      "id": 95,
+      "panels": [],
+      "title": "TCP, UDP und Prozesse",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 37
+      },
+      "id": 96,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "netstat_tcp_established{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "Verbunden",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "netstat_tcp_listen{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "Lauschend",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "netstat_tcp_time_wait{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "Abschlussphase",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "TCP · Verbindungen und offene Ports",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 37
+      },
+      "id": 97,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "netstat_udp_socket{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "Sockets",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "UDP · offene Sockets",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "suffix: /s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 45
+      },
+      "id": 98,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rate(nstat_TcpRetransSegs{job=\"telegraf-dashboard\",host=\"dashboard\"}[5m])",
+          "instant": false,
+          "legendFormat": "Erneut gesendet",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rate(nstat_TcpAttemptFails{job=\"telegraf-dashboard\",host=\"dashboard\"}[5m])",
+          "instant": false,
+          "legendFormat": "Fehlversuche",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rate(nstat_TcpEstabResets{job=\"telegraf-dashboard\",host=\"dashboard\"}[5m])",
+          "instant": false,
+          "legendFormat": "Verbindungsabbrüche",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "TCP · Wiederholungen, Fehlversuche und Resets",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 45
+      },
+      "id": 99,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "processes_total{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "Prozesse",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "processes_total_threads{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "Threads",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Prozesse und Threads",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 53
+      },
+      "id": 100,
+      "panels": [],
+      "title": "Grafana, Prometheus, Loki, InfluxDB und Nginx",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "suffix: vCPU"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 54
+      },
+      "id": 101,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rate(systemd_units_cpu_stat_usage_usec{job=\"telegraf-dashboard\",host=\"dashboard\",name=~\"grafana-server.service|prometheus.service|loki.service|influxdb.service|nginx.service\"}[5m])/1e6 and on(job,instance) (up{job=\"telegraf-dashboard\"} == 1)",
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU je Dienst · genutzte vCPU-Kerne",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 54
+      },
+      "id": 102,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "systemd_units_memory_current{job=\"telegraf-dashboard\",host=\"dashboard\",name=~\"grafana-server.service|prometheus.service|loki.service|influxdb.service|nginx.service\"} and on(job,instance) (up{job=\"telegraf-dashboard\"} == 1)",
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM je Dienst · einschließlich Cache",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 42,
+  "tags": [
+    "Monitoring",
+    "Dashboard-PC"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Dashboard-PC · Netz und Dienste",
+  "weekStart": "",
+  "uid": "mon-dashboard-system",
+  "id": null,
+  "version": 0,
+  "__inputs": [
+    {
+      "name": "DS_MON_PROMETHEUS",
+      "label": "Prometheus · mon-prometheus",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ]
+}

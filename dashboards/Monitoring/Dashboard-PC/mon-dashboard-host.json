@@ -1,0 +1,1375 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Dashboard-PC-Ordner",
+      "tooltip": "",
+      "type": "link",
+      "url": "/dashboards/f/mon-dashboard-folder/dashboard-pc"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Ressourcen",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-dashboard-host"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Netz und Dienste",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-dashboard-system"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Socket-Momentaufnahmen",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-connections?var-host=dashboard"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Betriebsübersicht",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-operations"
+    }
+  ],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 90,
+      "options": {
+        "content": "Live-Messwerte der VM 106. Dateisysteme und Laufwerke erscheinen einzeln.",
+        "mode": "markdown"
+      },
+      "title": "Dashboard-PC · Ressourcen",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "Messwerterfassung",
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "text": "Nicht erreichbar"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "Erreichbar"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange"
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(up{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": true,
+          "legendFormat": "Messwerterfassung",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Messwerterfassung",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "CPU-Auslastung",
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "100 - max(cpu_usage_idle{job=\"telegraf-dashboard\",host=\"dashboard\",cpu=\"cpu-total\"})",
+          "instant": true,
+          "legendFormat": "CPU-Auslastung",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU-Auslastung",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "RAM belegt",
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(mem_used_percent{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": true,
+          "legendFormat": "RAM belegt",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM belegt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Dateisystem /",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Systemspeicher belegt",
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(disk_used_percent{job=\"telegraf-dashboard\",host=\"dashboard\",path=\"/\"})",
+          "instant": true,
+          "legendFormat": "Systemspeicher belegt",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Systemspeicher belegt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Laufzeit",
+          "noValue": "Keine Daten",
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(system_uptime{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": true,
+          "legendFormat": "Laufzeit",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Laufzeit",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "RAM verfügbar",
+          "noValue": "Keine Daten",
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(mem_available{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": true,
+          "legendFormat": "RAM verfügbar",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM verfügbar",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "100 - max(cpu_usage_idle{job=\"telegraf-dashboard\",host=\"dashboard\",cpu=\"cpu-total\"})",
+          "instant": false,
+          "legendFormat": "Auslastung",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU-Auslastung · Verlauf",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 19
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "mem_used_percent{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "RAM belegt · Verlauf",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM belegt · Verlauf",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (path) (disk_used_percent{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": false,
+          "legendFormat": "{{path}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Dateisysteme · Belegung",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (path) (disk_free{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": false,
+          "legendFormat": "{{path}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Dateisysteme · frei",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 35
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(system_load1{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": false,
+          "legendFormat": "1 min",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(system_load5{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": false,
+          "legendFormat": "5 min",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(system_load15{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": false,
+          "legendFormat": "15 min",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Systemlast · 1, 5 und 15 Minuten",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 35
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (name) (rate(diskio_read_bytes{job=\"telegraf-dashboard\",host=\"dashboard\"}[5m]))",
+          "instant": false,
+          "legendFormat": "Lesen · {{name}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (name) (rate(diskio_write_bytes{job=\"telegraf-dashboard\",host=\"dashboard\"}[5m]))",
+          "instant": false,
+          "legendFormat": "Schreiben · {{name}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Platte · Lesen und Schreiben",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "id": 91,
+      "panels": [],
+      "title": "CPU, Speicher und Datenträger",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 44
+      },
+      "id": 92,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "100 - cpu_usage_idle{job=\"telegraf-dashboard\",host=\"dashboard\",cpu!=\"cpu-total\"}",
+          "instant": false,
+          "legendFormat": "{{cpu}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU-Auslastung · je vCPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 44
+      },
+      "id": 93,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "cpu_usage_iowait{job=\"telegraf-dashboard\",host=\"dashboard\",cpu=\"cpu-total\"}",
+          "instant": false,
+          "legendFormat": "I/O-Wartezeit",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "cpu_usage_steal{job=\"telegraf-dashboard\",host=\"dashboard\",cpu=\"cpu-total\"}",
+          "instant": false,
+          "legendFormat": "Vom Hypervisor entzogen",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "CPU · Wartezeit und Steal",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 52
+      },
+      "id": 94,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "mem_available{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "Verfügbar",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "mem_active{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "Aktiv",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "mem_cached{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "Cache",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "RAM · verfügbar, aktiv und Cache",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 52
+      },
+      "id": 95,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "swap_used{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "Belegt",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Swap · belegt",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "unit": "iops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 60
+      },
+      "id": 96,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rate(diskio_reads{job=\"telegraf-dashboard\",host=\"dashboard\"}[5m])",
+          "instant": false,
+          "legendFormat": "{{name}} · Lesen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rate(diskio_writes{job=\"telegraf-dashboard\",host=\"dashboard\"}[5m])",
+          "instant": false,
+          "legendFormat": "{{name}} · Schreiben",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Datenträger · Lese- und Schreiboperationen",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 60
+      },
+      "id": 97,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "diskio_io_await{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Datenträger · durchschnittliche I/O-Wartezeit",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 68
+      },
+      "id": 98,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "diskio_io_util{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Datenträger · Auslastung",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "min": 0,
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 68
+      },
+      "id": 99,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "disk_inodes_used_percent{job=\"telegraf-dashboard\",host=\"dashboard\"}",
+          "instant": false,
+          "legendFormat": "{{path}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Dateisysteme · Inodes belegt",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 42,
+  "tags": [
+    "Monitoring",
+    "Dashboard-PC"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Dashboard-PC · Ressourcen",
+  "weekStart": "",
+  "uid": "mon-dashboard-host",
+  "id": null,
+  "version": 0,
+  "__inputs": [
+    {
+      "name": "DS_MON_PROMETHEUS",
+      "label": "Prometheus · mon-prometheus",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "exported_at_utc": "2026-11-22T13:57:39Z",
+  "grafana_version": "13.3.1",
+  "dashboard_count": 15,
+  "folder_count": 7,
+  "dashboards": [
+    {
+      "path": "dashboards/Monitoring/Netzwerkgeräte/mon-asus-ap.json",
+      "uid": "mon-asus-ap",
+      "title": "ASUS RT-BE58U · Systemprotokoll",
+      "folder_uid": "mon-network-devices",
+      "panel_count": 9,
+      "datasource_inputs": [
+        "DS_MON_LOKI"
+      ],
+      "source_dashboard_version": 2,
+      "refreshed_at_utc": "2026-11-22T14:09:35Z"
+    },
+    {
+      "path": "dashboards/Monitoring/mon-connections.json",
+      "uid": "mon-connections",
+      "title": "Netzwerk · Verbindungen und Gegenstellen",
+      "folder_uid": "mon-overview",
+      "panel_count": 29,
+      "datasource_inputs": [
+        "DS_MON_LOKI",
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/Dashboard-PC/mon-dashboard-host.json",
+      "uid": "mon-dashboard-host",
+      "title": "Dashboard-PC · Ressourcen",
+      "folder_uid": "mon-dashboard-folder",
+      "panel_count": 22,
+      "datasource_inputs": [
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/Dashboard-PC/mon-dashboard-system.json",
+      "uid": "mon-dashboard-system",
+      "title": "Dashboard-PC · Netz und Dienste",
+      "folder_uid": "mon-dashboard-folder",
+      "panel_count": 17,
+      "datasource_inputs": [
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/DNS/mon-dns.json",
+      "uid": "mon-dns",
+      "title": "DNS · Hostübersicht",
+      "folder_uid": "mon-host-dns",
+      "panel_count": 56,
+      "datasource_inputs": [
+        "DS_MON_LOKI",
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/mon-logs.json",
+      "uid": "mon-logs",
+      "title": "Logs · Analyse und Sicherheit",
+      "folder_uid": "mon-overview",
+      "panel_count": 27,
+      "datasource_inputs": [
+        "DS_MON_LOKI",
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/mon-operations.json",
+      "uid": "mon-operations",
+      "title": "Monitoring · Betriebsübersicht",
+      "folder_uid": "mon-overview",
+      "panel_count": 29,
+      "datasource_inputs": [
+        "DS_MON_LOKI",
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/mon-overview.json",
+      "uid": "mon-overview",
+      "title": "Monitoring · Gesamtüberblick",
+      "folder_uid": "mon-overview",
+      "panel_count": 44,
+      "datasource_inputs": [
+        "DS_MON_LOKI",
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/Proxy/mon-proxy.json",
+      "uid": "mon-proxy",
+      "title": "Proxy · Hostübersicht",
+      "folder_uid": "mon-host-proxy",
+      "panel_count": 41,
+      "datasource_inputs": [
+        "DS_MON_LOKI",
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/Proxmox/mon-pve.json",
+      "uid": "mon-pve",
+      "title": "Proxmox · Hostübersicht",
+      "folder_uid": "mon-host-pve",
+      "panel_count": 56,
+      "datasource_inputs": [
+        "DS_MON_INFLUX_PVE",
+        "DS_MON_LOKI",
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/UniFi/mon-unifi.json",
+      "uid": "mon-unifi",
+      "title": "UniFi · Netzwerk und WLAN",
+      "folder_uid": "mon-unifi-folder",
+      "panel_count": 32,
+      "datasource_inputs": [
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/UniFi/mon-unifi-devices.json",
+      "uid": "mon-unifi-devices",
+      "title": "UniFi · Geräte und System",
+      "folder_uid": "mon-unifi-folder",
+      "panel_count": 12,
+      "datasource_inputs": [
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/UniFi/mon-unifi-logs.json",
+      "uid": "mon-unifi-logs",
+      "title": "UniFi · Systemprotokoll und Blockierungen",
+      "folder_uid": "mon-unifi-folder",
+      "panel_count": 13,
+      "datasource_inputs": [
+        "DS_MON_LOKI"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/UniFi/mon-unifi-ports.json",
+      "uid": "mon-unifi-ports",
+      "title": "UniFi · Ports und Leistung",
+      "folder_uid": "mon-unifi-folder",
+      "panel_count": 7,
+      "datasource_inputs": [
+        "DS_MON_PROMETHEUS"
+      ]
+    },
+    {
+      "path": "dashboards/Monitoring/UniFi/mon-unifi-wan.json",
+      "uid": "mon-unifi-wan",
+      "title": "UniFi · Internet und WAN",
+      "folder_uid": "mon-unifi-folder",
+      "panel_count": 8,
+      "datasource_inputs": [
+        "DS_MON_PROMETHEUS"
+      ]
+    }
+  ],
+  "datasources": [
+    {
+      "source_uid": "mon-influx-pve",
+      "plugin": "influxdb",
+      "input_name": "DS_MON_INFLUX_PVE"
+    },
+    {
+      "source_uid": "mon-loki",
+      "plugin": "loki",
+      "input_name": "DS_MON_LOKI"
+    },
+    {
+      "source_uid": "mon-prometheus",
+      "plugin": "prometheus",
+      "input_name": "DS_MON_PROMETHEUS"
+    }
+  ],
+  "sanitization_counts": {
+    "RESET_VARIABLE_OPTIONS": 19,
+    "INTERFACE": 6,
+    "SERVICE_URL": 1
+  },
+  "configuration_placeholders": {
+    "CONFIG_INTERFACE_1": "INTERFACE",
+    "CONFIG_SERVICE_URL_1": "SERVICE_URL"
+  },
+  "contains_live_data": false
+}

@@ -1,0 +1,2903 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [
+    {
+      "keepTime": true,
+      "title": "Gesamtüberblick",
+      "type": "link",
+      "url": "/d/mon-overview"
+    },
+    {
+      "keepTime": true,
+      "title": "Proxmox",
+      "type": "link",
+      "url": "/d/mon-pve"
+    },
+    {
+      "keepTime": true,
+      "title": "DNS",
+      "type": "link",
+      "url": "/d/mon-dns"
+    },
+    {
+      "keepTime": true,
+      "title": "Proxy",
+      "type": "link",
+      "url": "/d/mon-proxy"
+    },
+    {
+      "keepTime": false,
+      "title": "Dashboard-PC",
+      "type": "link",
+      "url": "/d/mon-dashboard-host"
+    },
+    {
+      "keepTime": false,
+      "title": "UniFi",
+      "type": "link",
+      "url": "/d/mon-unifi"
+    },
+    {
+      "keepTime": false,
+      "title": "Loganalyse",
+      "type": "link",
+      "url": "/d/mon-logs"
+    },
+    {
+      "keepTime": false,
+      "title": "Verbindungen",
+      "type": "link",
+      "url": "/d/mon-connections"
+    },
+    {
+      "title": "Netzwerkgeräte",
+      "type": "link",
+      "url": "/dashboards/f/mon-network-devices/netzwerkgeraete"
+    }
+  ],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "content": "**Monitoring auf einen Blick.** Die Namen führen zu den Detailseiten.",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "id": 2,
+      "options": {
+        "content": "### [Proxmox öffnen](/d/mon-pve)",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Fehler"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 5
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "up{job=\"proxmox-pve\"}",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Sammler",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Sammler",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 3,
+        "y": 5
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 - last_over_time(cpu_usage_idle{job=\"proxmox-pve\",cpu=\"cpu-total\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "CPU",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 6,
+        "y": 5
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * (1 - last_over_time(mem_available{job=\"proxmox-pve\"}[3m]) / last_over_time(mem_total{job=\"proxmox-pve\"}[3m]))) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "RAM",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 9,
+        "y": 5
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(swap_used_percent{job=\"proxmox-pve\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Swap",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Swap",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 12,
+        "y": 5
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max((last_over_time(disk_used_percent{job=\"proxmox-pve\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Dateisystem · Maximum",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dateisystem · Maximum",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 180
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 15,
+        "y": 5
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "time() - max(max_over_time(timestamp(cpu_usage_idle{job=\"proxmox-pve\",cpu=\"cpu-total\"})[24h:1m]))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "CPU-Datenalter",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU-Datenalter",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Nur frisch gemeldete Laufwerke; fehlende Datenträger separat prüfen. Keine Vollständigkeitszusage.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Fehler"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 18,
+        "y": 5
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "min(((last_over_time(smartctl_health_ok{job=\"proxmox-pve\"}[15m])) and on(job,host_id,serial) ((last_over_time(smart_collection_snapshot_available{job=\"proxmox-pve\"}[3m]) == 1) and (time() - last_over_time(smart_collection_snapshot_timestamp{job=\"proxmox-pve\"}[24h]) <= 900))) and on(job,instance) (up{job=\"proxmox-pve\"} == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Schlechtester gemeldeter SMART-Status",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Schlechtester gemeldeter SMART-Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 180
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 21,
+        "y": 5
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(time() - last_over_time(smart_collection_snapshot_timestamp{job=\"proxmox-pve\"}[24h]))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "SMART-Alter",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "SMART-Alter",
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "id": 11,
+      "options": {
+        "content": "### [DNS öffnen](/d/mon-dns)",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Fehler"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 12
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "up{job=\"telegraf-dns\"}",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Sammler",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Sammler",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 3,
+        "y": 12
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 - last_over_time(cpu_usage_idle{job=\"telegraf-dns\",cpu=\"cpu-total\"}[3m])) and on(job,instance) (up{job=\"telegraf-dns\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "CPU",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 6,
+        "y": 12
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * (1 - last_over_time(mem_available{job=\"telegraf-dns\"}[3m]) / last_over_time(mem_total{job=\"telegraf-dns\"}[3m]))) and on(job,instance) (up{job=\"telegraf-dns\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "RAM",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 9,
+        "y": 12
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(swap_used_percent{job=\"telegraf-dns\"}[3m])) and on(job,instance) (up{job=\"telegraf-dns\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Swap",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Swap",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 12,
+        "y": 12
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max((last_over_time(disk_used_percent{job=\"telegraf-dns\"}[3m])) and on(job,instance) (up{job=\"telegraf-dns\"} == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Dateisystem · Maximum",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dateisystem · Maximum",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 180
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 15,
+        "y": 12
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "time() - max(max_over_time(timestamp(cpu_usage_idle{job=\"telegraf-dns\",cpu=\"cpu-total\"})[24h:1m]))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "CPU-Datenalter",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU-Datenalter",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Nur frisch gemeldete Laufwerke; fehlende Datenträger separat prüfen. Keine Vollständigkeitszusage.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Fehler"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 18,
+        "y": 12
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "min(((last_over_time(smart_smart_smart_status_passed{job=\"telegraf-dns\"}[15m])) and on(job,instance,device) ((last_over_time(smart_collection_ok{job=\"telegraf-dns\"}[3m]) == 1) and (time() - last_over_time(smart_collection_unix{job=\"telegraf-dns\"}[24h]) <= 900))) and on(job,instance) (up{job=\"telegraf-dns\"} == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Schlechtester gemeldeter SMART-Status",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Schlechtester gemeldeter SMART-Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 180
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 21,
+        "y": 12
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(time() - last_over_time(smart_collection_unix{job=\"telegraf-dns\"}[24h]))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "SMART-Alter",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "SMART-Alter",
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 20,
+      "options": {
+        "content": "### [Proxy öffnen](/d/mon-proxy)",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Fehler"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 19
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "up{job=\"proxy\"}",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Sammler",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Sammler",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 3,
+        "y": 19
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 - last_over_time(cpu_usage_idle{job=\"proxy\",cpu=\"cpu-total\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "CPU",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 6,
+        "y": 19
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * (1 - last_over_time(mem_available{job=\"proxy\"}[3m]) / last_over_time(mem_total{job=\"proxy\"}[3m]))) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "RAM",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 9,
+        "y": 19
+      },
+      "id": 24,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(swap_used_percent{job=\"proxy\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Swap",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Swap",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 12,
+        "y": 19
+      },
+      "id": 25,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max((last_over_time(disk_used_percent{job=\"proxy\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Dateisystem · Maximum",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dateisystem · Maximum",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 180
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 15,
+        "y": 19
+      },
+      "id": 26,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "time() - max(max_over_time(timestamp(cpu_usage_idle{job=\"proxy\",cpu=\"cpu-total\"})[24h:1m]))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "CPU-Datenalter",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU-Datenalter",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Nur frisch gemeldete Laufwerke; fehlende Datenträger separat prüfen. Keine Vollständigkeitszusage.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Fehler"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 18,
+        "y": 19
+      },
+      "id": 27,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "min(((last_over_time(proxy_health_smart_passed{job=\"proxy\"}[15m])) and on(job,instance) ((last_over_time(proxy_health_smart_available{job=\"proxy\"}[3m]) == 1) and (time() - last_over_time(proxy_health_sample_timestamp_seconds{job=\"proxy\"}[24h]) <= 180))) and on(job,instance) (up{job=\"proxy\"} == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Schlechtester gemeldeter SMART-Status",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Schlechtester gemeldeter SMART-Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 180
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 21,
+        "y": 19
+      },
+      "id": 28,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(time() - last_over_time(proxy_health_sample_timestamp_seconds{job=\"proxy\"}[24h]))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "SMART-Alter",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "SMART-Alter",
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 29,
+      "options": {
+        "content": "### Dashboard-PC · [Ressourcen](/d/mon-dashboard-host) · [Netz und Dienste](/d/mon-dashboard-system)",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "Messwerterfassung",
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "text": "Nicht erreichbar"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "Erreichbar"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange"
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 26
+      },
+      "id": 30,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(up{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": true,
+          "legendFormat": "Messwerterfassung",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Messwerterfassung",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "CPU-Auslastung",
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 26
+      },
+      "id": 31,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "100 - max(cpu_usage_idle{job=\"telegraf-dashboard\",host=\"dashboard\",cpu=\"cpu-total\"})",
+          "instant": true,
+          "legendFormat": "CPU-Auslastung",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU-Auslastung",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "RAM belegt",
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 26
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(mem_used_percent{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": true,
+          "legendFormat": "RAM belegt",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM belegt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Dateisystem /",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Systemspeicher belegt",
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 12,
+        "y": 26
+      },
+      "id": 33,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(disk_used_percent{job=\"telegraf-dashboard\",host=\"dashboard\",path=\"/\"})",
+          "instant": true,
+          "legendFormat": "Systemspeicher belegt",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Systemspeicher belegt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Laufzeit",
+          "noValue": "Keine Daten",
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 26
+      },
+      "id": 34,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(system_uptime{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": true,
+          "legendFormat": "Laufzeit",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Laufzeit",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "RAM verfügbar",
+          "noValue": "Keine Daten",
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 26
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(mem_available{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "instant": true,
+          "legendFormat": "RAM verfügbar",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM verfügbar",
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      },
+      "id": 36,
+      "options": {
+        "content": "### UniFi · [Netz und WLAN](/d/mon-unifi) · [Internet](/d/mon-unifi-wan) · [Ports](/d/mon-unifi-ports) · [Geräte](/d/mon-unifi-devices) · [Firewall und Bedrohungen](/d/mon-unifi-logs)",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Schlechtester frischer Scrape-Zustand. Fehlende Zielserie bedeutet Keine Daten.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "Sammler",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Nicht erreichbar"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "Erreichbar"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red"
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 33
+      },
+      "id": 37,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Sammler · Zielstatus",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Sammler · Zielstatus",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Vom Exporter gemeldete Controller-Erreichbarkeit, nur bei frischem erreichbarem Sammler.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "Controller",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Nicht erreichbar"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "Erreichbar"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red"
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 33
+      },
+      "id": 38,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Controller · API-Status",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Controller · API-Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Tatsächliches Alter des UniFi-Sammlercaches in Sekunden. Ab 180 Sekunden werden Geräte- und Standortwerte ausgeblendet; ein alter Cache wird hier weiterhin sichtbar.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Datenalter",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 33
+      },
+      "id": 39,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Quelldaten · Alter",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Quelldaten · Alter",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Je Standort maximal gemeldeter Wert, anschließend über ausgewählte Standorte summiert. Wiederholte Varianten werden nicht addiert.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Access Points",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 12,
+        "y": 33
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(max by(site_name) (((unifipoller_site_aps{job=\"unpoller-unifi\",site_name=~\".+\"} and ((time()-timestamp(unifipoller_site_aps{job=\"unpoller-unifi\",site_name=~\".+\"})) >= 0) and ((time()-timestamp(unifipoller_site_aps{job=\"unpoller-unifi\",site_name=~\".+\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180)))))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Access Points",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Access Points",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Je Standort maximal gemeldeter Wert, anschließend über ausgewählte Standorte summiert. Wiederholte Varianten werden nicht addiert.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Gateways",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 33
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(max by(site_name) (((unifipoller_site_gateways{job=\"unpoller-unifi\",site_name=~\".+\"} and ((time()-timestamp(unifipoller_site_gateways{job=\"unpoller-unifi\",site_name=~\".+\"})) >= 0) and ((time()-timestamp(unifipoller_site_gateways{job=\"unpoller-unifi\",site_name=~\".+\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180)))))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Gateways",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Gateways",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Je Standort maximal gemeldeter Wert, anschließend über ausgewählte Standorte summiert. Wiederholte Varianten werden nicht addiert.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Switches",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 33
+      },
+      "id": 42,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(max by(site_name) (((unifipoller_site_switches{job=\"unpoller-unifi\",site_name=~\".+\"} and ((time()-timestamp(unifipoller_site_switches{job=\"unpoller-unifi\",site_name=~\".+\"})) >= 0) and ((time()-timestamp(unifipoller_site_switches{job=\"unpoller-unifi\",site_name=~\".+\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180)))))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Switches",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Switches",
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 38
+      },
+      "id": 43,
+      "options": {
+        "content": "### [ASUS RT-BE58U öffnen](/d/mon-asus-ap)",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Empfangene Meldungen",
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 40
+      },
+      "id": 44,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 36
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "(sum(count_over_time({host=\"asus-ap\",source=\"asus_syslog\"} [$__range])) or vector(0))",
+          "maxLines": 250,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Systemmeldungen",
+      "type": "stat"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 42,
+  "tags": [
+    "Monitoring",
+    "Hostansichten"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Monitoring · Gesamtüberblick",
+  "weekStart": "",
+  "uid": "mon-overview",
+  "id": null,
+  "version": 0,
+  "__inputs": [
+    {
+      "name": "DS_MON_LOKI",
+      "label": "Loki · mon-loki",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "loki",
+      "pluginName": "Loki"
+    },
+    {
+      "name": "DS_MON_PROMETHEUS",
+      "label": "Prometheus · mon-prometheus",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ]
+}

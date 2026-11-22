@@ -1,0 +1,3588 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [
+    {
+      "keepTime": true,
+      "title": "Gesamtüberblick",
+      "type": "link",
+      "url": "/d/mon-overview"
+    },
+    {
+      "keepTime": true,
+      "title": "Proxmox",
+      "type": "link",
+      "url": "/d/mon-pve"
+    },
+    {
+      "keepTime": true,
+      "title": "DNS",
+      "type": "link",
+      "url": "/d/mon-dns"
+    },
+    {
+      "keepTime": true,
+      "title": "Proxy",
+      "type": "link",
+      "url": "/d/mon-proxy"
+    }
+  ],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "content": "**Aktuell:** Systemwerte bis 3 Minuten, SMART bis 3 Minuten. Fehlende Daten bleiben leer. Sammlerstatus zeigt Erreichbarkeit; Zeitstempel beachten.",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Fehler"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 3
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "up{job=\"proxy\"}",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Sammler erreichbar",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Sammler erreichbar",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 180
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 3
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "time() - max(max_over_time(timestamp(cpu_usage_idle{job=\"proxy\",cpu=\"cpu-total\"})[24h:1m]))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Alter des letzten CPU-Punkts",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Alter des letzten CPU-Punkts",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 3
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(system_uptime{job=\"proxy\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Systemlaufzeit",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Systemlaufzeit",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 3
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(system_load1{job=\"proxy\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Load · 1 Minute",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Load · 1 Minute",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Enthält I/O-Wartezeit; kein Summieren der CPU-Einzelkerne.",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 8
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 - last_over_time(cpu_usage_idle{job=\"proxy\",cpu=\"cpu-total\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "CPU · Nicht-Leerlauf",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU · Nicht-Leerlauf",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 8
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * (1 - last_over_time(mem_available{job=\"proxy\"}[3m]) / last_over_time(mem_total{job=\"proxy\"}[3m]))) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "RAM belegt",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM belegt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 8
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(swap_used_percent{job=\"proxy\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Swap belegt",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Swap belegt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 8
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max((last_over_time(disk_used_percent{job=\"proxy\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Dateisystem · höchste Belegung",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dateisystem · höchste Belegung",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 13
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Systemverlauf",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 14
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 - cpu_usage_idle{job=\"proxy\",cpu=\"cpu-total\"}) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "CPU",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(cpu_usage_iowait{job=\"proxy\",cpu=\"cpu-total\"}) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "I/O-Wartezeit",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "CPU · Nicht-Leerlauf / I/O-Wartezeit",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 14
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * (1 - mem_available{job=\"proxy\"} / mem_total{job=\"proxy\"})) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "RAM",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(swap_used_percent{job=\"proxy\"}) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Swap",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "RAM / Swap",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 14
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(system_load1{job=\"proxy\"}) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "1 min",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(system_load5{job=\"proxy\"}) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "5 min",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(system_load15{job=\"proxy\"}) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "15 min",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Load · 1 / 5 / 15 Minuten",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 14,
+      "panels": [],
+      "title": "Dateisysteme und Datenträger",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 22
+      },
+      "id": 15,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(disk_used_percent{job=\"proxy\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dateisystembelegung",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host": true,
+              "host_id": true,
+              "instance": true,
+              "job": true,
+              "mode": true,
+              "role": true
+            },
+            "renameByName": {
+              "Value": "Belegt",
+              "device": "Gerät",
+              "fstype": "Dateisystem",
+              "path": "Pfad"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Dateisysteme ohne verwertbare Inode-Gesamtzahl bleiben ausgenommen.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 22
+      },
+      "id": 16,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((100 * (1 - last_over_time(disk_inodes_free{job=\"proxy\"}[3m]) / last_over_time(disk_inodes_total{job=\"proxy\"}[3m]))) and (last_over_time(disk_inodes_total{job=\"proxy\"}[3m]) > 0)) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Inodes · Belegung",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "fstype": true,
+              "host": true,
+              "host_id": true,
+              "instance": true,
+              "job": true,
+              "mode": true,
+              "role": true
+            },
+            "renameByName": {
+              "Value": "Inodes belegt",
+              "device": "Gerät",
+              "path": "Pfad"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Pro Gerät; physische Datenträger und logische Volumes nicht addieren.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 30
+      },
+      "id": 17,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(diskio_read_bytes{job=\"proxy\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Lesen {{name}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(diskio_write_bytes{job=\"proxy\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Schreiben {{name}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Datenträger · Lesen / Schreiben",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(diskio_reads{job=\"proxy\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Lesen {{name}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(diskio_writes{job=\"proxy\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Schreiben {{name}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Datenträger · IOPS",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Empfangene und gesendete Bytes pro Sekunde. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Senden"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#56A64B",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 37
+      },
+      "id": 18,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{job=\"proxy\",interface=\"usb_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{job=\"proxy\",interface=\"usb_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "USB-LAN · Datenverkehr",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Fehler und verworfene Pakete pro Sekunde. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangsfehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sendefehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF9830",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#B877D9",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 37
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{job=\"proxy\",interface=\"usb_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangsfehler",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{job=\"proxy\",interface=\"usb_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Sendefehler",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{job=\"proxy\",interface=\"usb_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "RX verworfen",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{job=\"proxy\",interface=\"usb_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "TX verworfen",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "USB-LAN · Paketfehler",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Empfangene und gesendete Bytes pro Sekunde. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Senden"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#56A64B",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 44
+      },
+      "id": 38,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{job=\"proxy\",interface=\"backend_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{job=\"proxy\",interface=\"backend_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Backend-LAN · Datenverkehr",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Fehler und verworfene Pakete pro Sekunde. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangsfehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sendefehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF9830",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#B877D9",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 44
+      },
+      "id": 39,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{job=\"proxy\",interface=\"backend_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangsfehler",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{job=\"proxy\",interface=\"backend_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Sendefehler",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{job=\"proxy\",interface=\"backend_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "RX verworfen",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{job=\"proxy\",interface=\"backend_lan\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "TX verworfen",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Backend-LAN · Paketfehler",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Empfangene und gesendete Bytes pro Sekunde. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Senden"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#56A64B",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 51
+      },
+      "id": 40,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{job=\"proxy\",interface=\"loopback\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{job=\"proxy\",interface=\"loopback\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Intern (Loopback) · Datenverkehr",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Fehler und verworfene Pakete pro Sekunde. Die Messreihen dieses Anschlusses sind getrennt dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfangsfehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sendefehler"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF9830",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TX verworfen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#B877D9",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 51
+      },
+      "id": 41,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{job=\"proxy\",interface=\"loopback\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangsfehler",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{job=\"proxy\",interface=\"loopback\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Sendefehler",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{job=\"proxy\",interface=\"loopback\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "RX verworfen",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{job=\"proxy\",interface=\"loopback\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "TX verworfen",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Intern (Loopback) · Paketfehler",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 58
+      },
+      "id": 21,
+      "panels": [],
+      "title": "Hardware und Dienste",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Bewertet nur frisch gemeldete Laufwerke. Fehlende Datenträger separat anhand der Laufwerksliste und Datenalter prüfen.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Fehler"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 59
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "min(((last_over_time(proxy_health_smart_passed{job=\"proxy\"}[15m])) and on(job,instance) ((last_over_time(proxy_health_smart_available{job=\"proxy\"}[3m]) == 1) and (time() - last_over_time(proxy_health_sample_timestamp_seconds{job=\"proxy\"}[24h]) <= 180))) and on(job,instance) (up{job=\"proxy\"} == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Schlechtester gemeldeter SMART-Status",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Schlechtester gemeldeter SMART-Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 180
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 59
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(time() - last_over_time(proxy_health_sample_timestamp_seconds{job=\"proxy\"}[24h]))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "SMART · älteste Meldung",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "SMART · älteste Meldung",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 59
+      },
+      "id": 24,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((last_over_time(proxy_health_smart_passed{job=\"proxy\"}[15m])) and on(job,instance) ((last_over_time(proxy_health_smart_available{job=\"proxy\"}[3m]) == 1) and (time() - last_over_time(proxy_health_sample_timestamp_seconds{job=\"proxy\"}[24h]) <= 180))) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "SMART · physisches Laufwerk",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "device_id": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host": true,
+              "host_id": true,
+              "instance": true,
+              "job": true,
+              "role": true,
+              "type": true,
+              "wwn": true
+            },
+            "renameByName": {
+              "Value": "Gesund",
+              "device": "Gerät",
+              "model": "Modell",
+              "name": "Gerät",
+              "serial": "Seriennummer"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 65
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(temp_temp{job=\"proxy\"}) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{sensor}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Temperaturen · Sensoren",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 65
+      },
+      "id": 26,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((last_over_time(proxy_health_smart_temperature_celsius{job=\"proxy\"}[15m])) and on(job,instance) ((last_over_time(proxy_health_smart_available{job=\"proxy\"}[3m]) == 1) and (time() - last_over_time(proxy_health_sample_timestamp_seconds{job=\"proxy\"}[24h]) <= 180))) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Physisches Laufwerk",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Temperaturen · Laufwerke",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 72
+      },
+      "id": 27,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(systemd_units_active_code{job=\"proxy\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dienste · Zustand",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "__name__": true,
+              "collector": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host": true,
+              "host_id": true,
+              "instance": true,
+              "job": true,
+              "load": true,
+              "preset": true,
+              "role": true
+            },
+            "renameByName": {
+              "active": "Zustand",
+              "name": "Dienst",
+              "state": "Starttyp",
+              "sub": "Unterzustand"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "NRestarts zählt automatische Neustarts; manuelle Neustarts sind nicht vollständig enthalten.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 72
+      },
+      "id": 28,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(systemd_units_restarts{job=\"proxy\"}[3m])) and on(job,instance) (up{job=\"proxy\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dienste · automatische Neustarts",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "active": true,
+              "collector": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host": true,
+              "host_id": true,
+              "instance": true,
+              "job": true,
+              "load": true,
+              "preset": true,
+              "role": true,
+              "state": true,
+              "sub": true
+            },
+            "renameByName": {
+              "Value": "NRestarts",
+              "name": "Dienst"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 80
+      },
+      "id": 29,
+      "options": {
+        "content": "Web- und Sicherheitsereignisse erscheinen nach Eingang der Proxy-Protokolle. Fehlende Anwendungswerte werden als **Keine Daten** angezeigt.",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 82
+      },
+      "id": 30,
+      "panels": [],
+      "title": "Protokolle",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Unveränderte Host-Rohprotokolle als Rückfallebene. Aufbereitete Dienst-/Fehlerübersichten stehen zusätzlich unten; SSH und Firewall werden separat ohne Rohmeldungen zusammengefasst.",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 83
+      },
+      "id": 31,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host_id=\"proxy\"}",
+          "maxLines": 150,
+          "queryType": "range",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host=\"proxy\",host_id=\"\"}",
+          "maxLines": 150,
+          "queryType": "range",
+          "refId": "B"
+        }
+      ],
+      "title": "Alle Hostprotokolle",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Je Rechner, Quell-IP und Ergebnis: Ereignisanzahl sowie erste/letzte gespeicherte Loki-Ereigniszeit im gewählten Zeitraum (Millisekunden). Höchstens 200 Gruppen nach Anzahl; keine Rohmeldungen. Gezählt werden Accepted/Failed-Entscheidungen; Invalid-user/PAM-Echos werden nicht zusätzlich gezählt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            }
+          },
+          "noValue": "—"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Erstmals"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Zuletzt"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 93
+      },
+      "id": 32,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Anzahl"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace((topk(200, sum by (host,source_ip,outcome) (label_replace((sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxy\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed`[$__range]))), \"scope_part\", \"0\", \"host\", \".*\") or label_replace((sum by (host,source_ip,outcome) (count_over_time({host=\"proxy\",host_id=\"\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed`[$__range]))), \"scope_part\", \"1\", \"host\", \".*\")))), \"value_kind\", \"count\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace(((min by (host,source_ip,outcome) (label_replace((min_over_time({host_id=\"proxy\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)), \"scope_part\", \"0\", \"host\", \".*\") or label_replace((min_over_time({host=\"proxy\",host_id=\"\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)), \"scope_part\", \"1\", \"host\", \".*\"))) and on (host,source_ip,outcome) (topk(200, sum by (host,source_ip,outcome) (label_replace((sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxy\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed`[$__range]))), \"scope_part\", \"0\", \"host\", \".*\") or label_replace((sum by (host,source_ip,outcome) (count_over_time({host=\"proxy\",host_id=\"\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed`[$__range]))), \"scope_part\", \"1\", \"host\", \".*\"))))), \"value_kind\", \"first\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace(((max by (host,source_ip,outcome) (label_replace((max_over_time({host_id=\"proxy\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)), \"scope_part\", \"0\", \"host\", \".*\") or label_replace((max_over_time({host=\"proxy\",host_id=\"\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)), \"scope_part\", \"1\", \"host\", \".*\"))) and on (host,source_ip,outcome) (topk(200, sum by (host,source_ip,outcome) (label_replace((sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxy\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed`[$__range]))), \"scope_part\", \"0\", \"host\", \".*\") or label_replace((sum by (host,source_ip,outcome) (count_over_time({host=\"proxy\",host_id=\"\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed`[$__range]))), \"scope_part\", \"1\", \"host\", \".*\"))))), \"value_kind\", \"last\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "C"
+        }
+      ],
+      "title": "SSH · Quellen und Anmeldeergebnis",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns",
+            "valueLabel": "value_kind"
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "exclude": {
+              "names": [
+                "Time",
+                "value_kind"
+              ]
+            }
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "value_kind": true
+            },
+            "indexByName": {
+              "Value #A": 3,
+              "Value #B": 4,
+              "Value #C": 5,
+              "count": 3,
+              "first": 4,
+              "host": 0,
+              "last": 5,
+              "outcome": 2,
+              "source_ip": 1
+            },
+            "renameByName": {
+              "Value #A": "Anzahl",
+              "Value #B": "Erstmals",
+              "Value #C": "Zuletzt",
+              "count": "Anzahl",
+              "first": "Erstmals",
+              "host": "Rechner",
+              "last": "Zuletzt",
+              "outcome": "Ergebnis",
+              "source_ip": "Quell-IP"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Je Rechner, Quell-IP und Ergebnis: Ereignisanzahl sowie erste/letzte gespeicherte Loki-Ereigniszeit im gewählten Zeitraum (Millisekunden). Höchstens 200 Gruppen nach Anzahl; keine Rohmeldungen. Die Quelle stammt ausschließlich aus dem strukturierten SRC-Feld; UFW BLOCK wird als DROP geführt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            }
+          },
+          "noValue": "—"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Erstmals"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Zuletzt"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 103
+      },
+      "id": 33,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Anzahl"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace((topk(200, sum by (host,source_ip,outcome) (label_replace((sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxy\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}`[$__range]))), \"scope_part\", \"0\", \"host\", \".*\") or label_replace((sum by (host,source_ip,outcome) (count_over_time({host=\"proxy\",host_id=\"\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}`[$__range]))), \"scope_part\", \"1\", \"host\", \".*\")))), \"value_kind\", \"count\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace(((min by (host,source_ip,outcome) (label_replace((min_over_time({host_id=\"proxy\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)), \"scope_part\", \"0\", \"host\", \".*\") or label_replace((min_over_time({host=\"proxy\",host_id=\"\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)), \"scope_part\", \"1\", \"host\", \".*\"))) and on (host,source_ip,outcome) (topk(200, sum by (host,source_ip,outcome) (label_replace((sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxy\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}`[$__range]))), \"scope_part\", \"0\", \"host\", \".*\") or label_replace((sum by (host,source_ip,outcome) (count_over_time({host=\"proxy\",host_id=\"\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}`[$__range]))), \"scope_part\", \"1\", \"host\", \".*\"))))), \"value_kind\", \"first\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace(((max by (host,source_ip,outcome) (label_replace((max_over_time({host_id=\"proxy\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)), \"scope_part\", \"0\", \"host\", \".*\") or label_replace((max_over_time({host=\"proxy\",host_id=\"\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)), \"scope_part\", \"1\", \"host\", \".*\"))) and on (host,source_ip,outcome) (topk(200, sum by (host,source_ip,outcome) (label_replace((sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxy\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}`[$__range]))), \"scope_part\", \"0\", \"host\", \".*\") or label_replace((sum by (host,source_ip,outcome) (count_over_time({host=\"proxy\",host_id=\"\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}`[$__range]))), \"scope_part\", \"1\", \"host\", \".*\"))))), \"value_kind\", \"last\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "C"
+        }
+      ],
+      "title": "Firewall · Quellen und DROP / REJECT",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns",
+            "valueLabel": "value_kind"
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "exclude": {
+              "names": [
+                "Time",
+                "value_kind"
+              ]
+            }
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "value_kind": true
+            },
+            "indexByName": {
+              "Value #A": 3,
+              "Value #B": 4,
+              "Value #C": 5,
+              "count": 3,
+              "first": 4,
+              "host": 0,
+              "last": 5,
+              "outcome": 2,
+              "source_ip": 1
+            },
+            "renameByName": {
+              "Value #A": "Anzahl",
+              "Value #B": "Erstmals",
+              "Value #C": "Zuletzt",
+              "count": "Anzahl",
+              "first": "Erstmals",
+              "host": "Rechner",
+              "last": "Zuletzt",
+              "outcome": "Ergebnis",
+              "source_ip": "Quell-IP"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Vom Logeingang bestätigte Logzeilen pro Sekunde. Bei fehlenden aktuellen Sammlerdaten wird keine Rate angezeigt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "decimals": 3,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine aktuellen Daten",
+          "unit": "eps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 113
+      },
+      "id": 34,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(alloy_health_loki_write_sent_entries_total{job=\"proxy\",host_id=\"proxy\"}[$__rate_interval]) and on(job,instance) ((up{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) (proxy_health_unit_alloy_active{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) (proxy_health_unit_alloy_available{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) ((time() - proxy_health_sample_timestamp_seconds{job=\"proxy\",host_id=\"proxy\"}) >= 0) and on(job,instance) ((time() - proxy_health_sample_timestamp_seconds{job=\"proxy\",host_id=\"proxy\"}) < 180)))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Zugestellt / s",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Logs · zugestellte Einträge",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Verworfene Logzeilen und Versandwiederholungen pro Sekunde. Fehlende Messwerte werden nicht als Null dargestellt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "decimals": 3,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine aktuellen Daten",
+          "unit": "eps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 113
+      },
+      "id": 35,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(alloy_health_loki_write_dropped_entries_total{job=\"proxy\",host_id=\"proxy\"}[$__rate_interval]) and on(job,instance) ((up{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) (proxy_health_unit_alloy_active{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) (proxy_health_unit_alloy_available{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) ((time() - proxy_health_sample_timestamp_seconds{job=\"proxy\",host_id=\"proxy\"}) >= 0) and on(job,instance) ((time() - proxy_health_sample_timestamp_seconds{job=\"proxy\",host_id=\"proxy\"}) < 180)))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen / s",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(alloy_health_loki_write_batch_retries_total{job=\"proxy\",host_id=\"proxy\"}[$__rate_interval]) and on(job,instance) ((up{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) (proxy_health_unit_alloy_active{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) (proxy_health_unit_alloy_available{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) ((time() - proxy_health_sample_timestamp_seconds{job=\"proxy\",host_id=\"proxy\"}) >= 0) and on(job,instance) ((time() - proxy_health_sample_timestamp_seconds{job=\"proxy\",host_id=\"proxy\"}) < 180)))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Wiederholungen / s",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Logs · Verluste und Wiederholungen",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Komponenten nach Zustand und aktive Dateiquellen zeigen den Logsammler. Alarmzahlen erscheinen erst bei einem frischen Auswertungs-Heartbeat der Proxy-Regeln.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine aktuellen Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine aktuellen Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Komponenten · healthy"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red"
+                    },
+                    {
+                      "color": "green",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Bereite Komponenten"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Aktive Dateiquellen"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red"
+                    },
+                    {
+                      "color": "green",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Alarme in Prüfung"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Komponenten · unhealthy"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gestörte Komponenten"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Komponenten · unknown"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Unbekannte Komponenten"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 113
+      },
+      "id": 36,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum by(health_type)(alloy_health_alloy_component_controller_running_components{job=\"proxy\",host_id=\"proxy\"} and on(job,instance) ((up{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) (proxy_health_unit_alloy_active{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) (proxy_health_unit_alloy_available{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) ((time() - proxy_health_sample_timestamp_seconds{job=\"proxy\",host_id=\"proxy\"}) >= 0) and on(job,instance) ((time() - proxy_health_sample_timestamp_seconds{job=\"proxy\",host_id=\"proxy\"}) < 180)))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Komponenten · {{health_type}}",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(alloy_health_loki_source_file_files_active_total{job=\"proxy\",host_id=\"proxy\"} and on(job,instance) ((up{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) (proxy_health_unit_alloy_active{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) (proxy_health_unit_alloy_available{job=\"proxy\",host_id=\"proxy\"} == 1) and on(job,instance) ((time() - proxy_health_sample_timestamp_seconds{job=\"proxy\",host_id=\"proxy\"}) >= 0) and on(job,instance) ((time() - proxy_health_sample_timestamp_seconds{job=\"proxy\",host_id=\"proxy\"}) < 180)))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Aktive Dateiquellen",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((count(ALERTS{job=\"proxy\",host_id=\"proxy\",alertstate=\"firing\"}) or vector(0)) and on() ((proxy:monitoring_rules_loaded{job=\"proxy\",host_id=\"proxy\"} == 1) and (time() - timestamp(proxy:monitoring_rules_loaded{job=\"proxy\",host_id=\"proxy\"}) < 180))) and on() (up{job=\"prometheus\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Auslösende Alarme",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((count(ALERTS{job=\"proxy\",host_id=\"proxy\",alertstate=\"pending\"}) or vector(0)) and on() ((proxy:monitoring_rules_loaded{job=\"proxy\",host_id=\"proxy\"} == 1) and (time() - timestamp(proxy:monitoring_rules_loaded{job=\"proxy\",host_id=\"proxy\"}) < 180))) and on() (up{job=\"prometheus\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Alarme in Prüfung",
+          "range": false,
+          "refId": "D"
+        }
+      ],
+      "title": "Logsammler · Zustand und Proxy-Alarme",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Einzelne endgültige Systemd-Dienstfehler aus Journal-/Syslogquellen: gespeicherte Ereigniszeit, Rechner, Dienst, feste Fehlerklasse und bekannte Quellseverity. Keine Rohmeldungen, Befehle oder Anmeldewerte; Snapshot-Dienste sind ausgeschlossen. Systemd wird bei der endgültigen Failed-with-result-Meldung erfasst; Folge-/PAM-/Invalid-user-Echos sind keine zusätzlichen Fehlerzeilen.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            }
+          },
+          "noValue": "—"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 121
+      },
+      "id": 37,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Zeit"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host_id=\"proxy\",source=~\"journal|syslog|systemd-journal|\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` |~ `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`systemd(?:\\.service)?|init` or service_name=~`systemd(?:\\.service)?|init`) | regexp `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | failed_unit!=\"\" | label_format event_service=`{{ .failed_unit }}` | event_service=~`[A-Za-z0-9_.@:-]{1,160}` | event_service!=\"unknown_service\" | event_service!~`(?i)connection[-_]snapshot` | label_format event_severity=`{{ $s := .level | default .severity | default .priority | lower }}{{ if or (eq $s \"emerg\") (eq $s \"alert\") (eq $s \"crit\") (eq $s \"critical\") (eq $s \"panic\") (eq $s \"0\") (eq $s \"1\") (eq $s \"2\") }}critical{{ else if or (eq $s \"err\") (eq $s \"error\") (eq $s \"fatal\") (eq $s \"3\") }}error{{ else if or (eq $s \"warn\") (eq $s \"warning\") (eq $s \"4\") }}warning{{ else if or (eq $s \"notice\") (eq $s \"info\") (eq $s \"5\") (eq $s \"6\") }}info{{ else if .failed_unit }}error{{ else }}unknown{{ end }}` | label_format error_category=\"service_failed\" | line_format `{\"host\":\"{{ .host }}\",\"service\":\"{{ .event_service }}\",\"error_category\":\"{{ .error_category }}\",\"severity\":\"{{ .event_severity }}\",\"event_ns\":\"{{ __timestamp__ | unixEpochNanos }}\"}`",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "range",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host_id=\"proxy\",job=\"systemd-journal\",source!~\"journal|syslog|systemd-journal|\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` |~ `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`systemd(?:\\.service)?|init` or service_name=~`systemd(?:\\.service)?|init`) | regexp `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | failed_unit!=\"\" | label_format event_service=`{{ .failed_unit }}` | event_service=~`[A-Za-z0-9_.@:-]{1,160}` | event_service!=\"unknown_service\" | event_service!~`(?i)connection[-_]snapshot` | label_format event_severity=`{{ $s := .level | default .severity | default .priority | lower }}{{ if or (eq $s \"emerg\") (eq $s \"alert\") (eq $s \"crit\") (eq $s \"critical\") (eq $s \"panic\") (eq $s \"0\") (eq $s \"1\") (eq $s \"2\") }}critical{{ else if or (eq $s \"err\") (eq $s \"error\") (eq $s \"fatal\") (eq $s \"3\") }}error{{ else if or (eq $s \"warn\") (eq $s \"warning\") (eq $s \"4\") }}warning{{ else if or (eq $s \"notice\") (eq $s \"info\") (eq $s \"5\") (eq $s \"6\") }}info{{ else if .failed_unit }}error{{ else }}unknown{{ end }}` | label_format error_category=\"service_failed\" | line_format `{\"host\":\"{{ .host }}\",\"service\":\"{{ .event_service }}\",\"error_category\":\"{{ .error_category }}\",\"severity\":\"{{ .event_severity }}\",\"event_ns\":\"{{ __timestamp__ | unixEpochNanos }}\"}`",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "range",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host=\"proxy\",host_id=\"\",source=~\"journal|syslog|systemd-journal|\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` |~ `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`systemd(?:\\.service)?|init` or service_name=~`systemd(?:\\.service)?|init`) | regexp `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | failed_unit!=\"\" | label_format event_service=`{{ .failed_unit }}` | event_service=~`[A-Za-z0-9_.@:-]{1,160}` | event_service!=\"unknown_service\" | event_service!~`(?i)connection[-_]snapshot` | label_format event_severity=`{{ $s := .level | default .severity | default .priority | lower }}{{ if or (eq $s \"emerg\") (eq $s \"alert\") (eq $s \"crit\") (eq $s \"critical\") (eq $s \"panic\") (eq $s \"0\") (eq $s \"1\") (eq $s \"2\") }}critical{{ else if or (eq $s \"err\") (eq $s \"error\") (eq $s \"fatal\") (eq $s \"3\") }}error{{ else if or (eq $s \"warn\") (eq $s \"warning\") (eq $s \"4\") }}warning{{ else if or (eq $s \"notice\") (eq $s \"info\") (eq $s \"5\") (eq $s \"6\") }}info{{ else if .failed_unit }}error{{ else }}unknown{{ end }}` | label_format error_category=\"service_failed\" | line_format `{\"host\":\"{{ .host }}\",\"service\":\"{{ .event_service }}\",\"error_category\":\"{{ .error_category }}\",\"severity\":\"{{ .event_severity }}\",\"event_ns\":\"{{ __timestamp__ | unixEpochNanos }}\"}`",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "range",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host=\"proxy\",host_id=\"\",job=\"systemd-journal\",source!~\"journal|syslog|systemd-journal|\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` |~ `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`systemd(?:\\.service)?|init` or service_name=~`systemd(?:\\.service)?|init`) | regexp `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | failed_unit!=\"\" | label_format event_service=`{{ .failed_unit }}` | event_service=~`[A-Za-z0-9_.@:-]{1,160}` | event_service!=\"unknown_service\" | event_service!~`(?i)connection[-_]snapshot` | label_format event_severity=`{{ $s := .level | default .severity | default .priority | lower }}{{ if or (eq $s \"emerg\") (eq $s \"alert\") (eq $s \"crit\") (eq $s \"critical\") (eq $s \"panic\") (eq $s \"0\") (eq $s \"1\") (eq $s \"2\") }}critical{{ else if or (eq $s \"err\") (eq $s \"error\") (eq $s \"fatal\") (eq $s \"3\") }}error{{ else if or (eq $s \"warn\") (eq $s \"warning\") (eq $s \"4\") }}warning{{ else if or (eq $s \"notice\") (eq $s \"info\") (eq $s \"5\") (eq $s \"6\") }}info{{ else if .failed_unit }}error{{ else }}unknown{{ end }}` | label_format error_category=\"service_failed\" | line_format `{\"host\":\"{{ .host }}\",\"service\":\"{{ .event_service }}\",\"error_category\":\"{{ .error_category }}\",\"severity\":\"{{ .event_severity }}\",\"event_ns\":\"{{ __timestamp__ | unixEpochNanos }}\"}`",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "range",
+          "refId": "D"
+        }
+      ],
+      "title": "Dienstfehler · einzelne Ereignisse",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "json",
+            "keepTime": true,
+            "replace": true,
+            "source": "Line"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "event_ns": true,
+              "id": true,
+              "labels": true,
+              "tsNs": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "error_category": 3,
+              "host": 1,
+              "service": 2,
+              "severity": 4
+            },
+            "renameByName": {
+              "Time": "Zeit",
+              "error_category": "Fehlerklasse",
+              "host": "Rechner",
+              "service": "Dienst",
+              "severity": "Schweregrad"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 42,
+  "tags": [
+    "Monitoring",
+    "Hostansichten"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Proxy · Hostübersicht",
+  "weekStart": "",
+  "uid": "mon-proxy",
+  "id": null,
+  "version": 0,
+  "__inputs": [
+    {
+      "name": "DS_MON_LOKI",
+      "label": "Loki · mon-loki",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "loki",
+      "pluginName": "Loki"
+    },
+    {
+      "name": "DS_MON_PROMETHEUS",
+      "label": "Prometheus · mon-prometheus",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ]
+}

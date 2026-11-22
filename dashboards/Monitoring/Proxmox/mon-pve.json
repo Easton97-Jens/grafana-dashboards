@@ -1,0 +1,4345 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [
+    {
+      "keepTime": true,
+      "title": "Gesamtüberblick",
+      "type": "link",
+      "url": "/d/mon-overview"
+    },
+    {
+      "keepTime": true,
+      "title": "Proxmox",
+      "type": "link",
+      "url": "/d/mon-pve"
+    },
+    {
+      "keepTime": true,
+      "title": "DNS",
+      "type": "link",
+      "url": "/d/mon-dns"
+    },
+    {
+      "keepTime": true,
+      "title": "Proxy",
+      "type": "link",
+      "url": "/d/mon-proxy"
+    }
+  ],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "content": "**Aktuell:** Systemwerte bis 3 Minuten, SMART bis 15 Minuten. Fehlende Daten bleiben leer. Sammlerstatus zeigt Erreichbarkeit; Zeitstempel beachten.",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Fehler"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 3
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "up{job=\"proxmox-pve\"}",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Sammler erreichbar",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Sammler erreichbar",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 180
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 3
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "time() - max(max_over_time(timestamp(cpu_usage_idle{job=\"proxmox-pve\",cpu=\"cpu-total\"})[24h:1m]))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Alter des letzten CPU-Punkts",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Alter des letzten CPU-Punkts",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 3
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(linux_system_uptime{job=\"proxmox-pve\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Systemlaufzeit",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Systemlaufzeit",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 3
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(linux_system_load1{job=\"proxmox-pve\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Load · 1 Minute",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Load · 1 Minute",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Enthält I/O-Wartezeit; kein Summieren der CPU-Einzelkerne.",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 8
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 - last_over_time(cpu_usage_idle{job=\"proxmox-pve\",cpu=\"cpu-total\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "CPU · Nicht-Leerlauf",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU · Nicht-Leerlauf",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 8
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * (1 - last_over_time(mem_available{job=\"proxmox-pve\"}[3m]) / last_over_time(mem_total{job=\"proxmox-pve\"}[3m]))) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "RAM belegt",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "RAM belegt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 8
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(swap_used_percent{job=\"proxmox-pve\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Swap belegt",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Swap belegt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 8
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max((last_over_time(disk_used_percent{job=\"proxmox-pve\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Dateisystem · höchste Belegung",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dateisystem · höchste Belegung",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 13
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Systemverlauf",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 14
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 - cpu_usage_idle{job=\"proxmox-pve\",cpu=\"cpu-total\"}) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "CPU",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(cpu_usage_iowait{job=\"proxmox-pve\",cpu=\"cpu-total\"}) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "I/O-Wartezeit",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "CPU · Nicht-Leerlauf / I/O-Wartezeit",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 14
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * (1 - mem_available{job=\"proxmox-pve\"} / mem_total{job=\"proxmox-pve\"})) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "RAM",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(swap_used_percent{job=\"proxmox-pve\"}) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Swap",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "RAM / Swap",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 14
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(linux_system_load1{job=\"proxmox-pve\"}) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "1 min",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(linux_system_load5{job=\"proxmox-pve\"}) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "5 min",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(linux_system_load15{job=\"proxmox-pve\"}) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "15 min",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Load · 1 / 5 / 15 Minuten",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 14,
+      "panels": [],
+      "title": "Dateisysteme und Datenträger",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 22
+      },
+      "id": 15,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(disk_used_percent{job=\"proxmox-pve\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dateisystembelegung",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host": true,
+              "host_id": true,
+              "instance": true,
+              "job": true,
+              "mode": true,
+              "role": true
+            },
+            "renameByName": {
+              "Value": "Belegt",
+              "device": "Gerät",
+              "fstype": "Dateisystem",
+              "path": "Pfad"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Dateisysteme ohne verwertbare Inode-Gesamtzahl bleiben ausgenommen.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 22
+      },
+      "id": 16,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((100 * (1 - last_over_time(disk_inodes_free{job=\"proxmox-pve\"}[3m]) / last_over_time(disk_inodes_total{job=\"proxmox-pve\"}[3m]))) and (last_over_time(disk_inodes_total{job=\"proxmox-pve\"}[3m]) > 0)) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Inodes · Belegung",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "fstype": true,
+              "host": true,
+              "host_id": true,
+              "instance": true,
+              "job": true,
+              "mode": true,
+              "role": true
+            },
+            "renameByName": {
+              "Value": "Inodes belegt",
+              "device": "Gerät",
+              "path": "Pfad"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Pro Gerät; physische Datenträger und logische Volumes nicht addieren.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 30
+      },
+      "id": 17,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(diskio_read_bytes{job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Lesen {{name}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(diskio_write_bytes{job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Schreiben {{name}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Datenträger · Lesen / Schreiben",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(diskio_reads{job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Lesen {{name}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(diskio_writes{job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Schreiben {{name}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Datenträger · IOPS",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 44
+      },
+      "id": 41,
+      "panels": [],
+      "title": "Netzwerk · physische Schnittstellen",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Physische Schnittstellen und Bridges nicht zu einem Gesamtdurchsatz addieren.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 45
+      },
+      "id": 18,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{interface=\"enp1s0f0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{interface=\"enp1s0f0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "enp1s0f0 · Empfangen / Senden",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 45
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{interface=\"enp1s0f0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler RX",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{interface=\"enp1s0f0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler TX",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{interface=\"enp1s0f0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen RX",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{interface=\"enp1s0f0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen TX",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "enp1s0f0 · Fehler / verworfene Pakete",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Physische Schnittstellen und Bridges nicht zu einem Gesamtdurchsatz addieren.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 52
+      },
+      "id": 42,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{interface=\"enp1s0f1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{interface=\"enp1s0f1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "enp1s0f1 · Empfangen / Senden",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 52
+      },
+      "id": 43,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{interface=\"enp1s0f1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler RX",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{interface=\"enp1s0f1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler TX",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{interface=\"enp1s0f1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen RX",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{interface=\"enp1s0f1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen TX",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "enp1s0f1 · Fehler / verworfene Pakete",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Physische Schnittstellen und Bridges nicht zu einem Gesamtdurchsatz addieren.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 59
+      },
+      "id": 44,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{interface=\"enp5s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{interface=\"enp5s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "enp5s0 · Empfangen / Senden",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 59
+      },
+      "id": 45,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{interface=\"enp5s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler RX",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{interface=\"enp5s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler TX",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{interface=\"enp5s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen RX",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{interface=\"enp5s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen TX",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "enp5s0 · Fehler / verworfene Pakete",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Physische Schnittstellen und Bridges nicht zu einem Gesamtdurchsatz addieren.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 66
+      },
+      "id": 46,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{interface=\"enp6s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{interface=\"enp6s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "enp6s0 · Empfangen / Senden",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 66
+      },
+      "id": 47,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{interface=\"enp6s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler RX",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{interface=\"enp6s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler TX",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{interface=\"enp6s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen RX",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{interface=\"enp6s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen TX",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "enp6s0 · Fehler / verworfene Pakete",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Physische Schnittstellen und Bridges nicht zu einem Gesamtdurchsatz addieren.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 73
+      },
+      "id": 48,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{interface=\"enp7s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{interface=\"enp7s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "enp7s0 · Empfangen / Senden",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 73
+      },
+      "id": 49,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{interface=\"enp7s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler RX",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{interface=\"enp7s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler TX",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{interface=\"enp7s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen RX",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{interface=\"enp7s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen TX",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "enp7s0 · Fehler / verworfene Pakete",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Physische Schnittstellen und Bridges nicht zu einem Gesamtdurchsatz addieren.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 80
+      },
+      "id": 50,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{interface=\"enp8s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{interface=\"enp8s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "enp8s0 · Empfangen / Senden",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 80
+      },
+      "id": 51,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{interface=\"enp8s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler RX",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{interface=\"enp8s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler TX",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{interface=\"enp8s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen RX",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{interface=\"enp8s0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen TX",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "enp8s0 · Fehler / verworfene Pakete",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 87
+      },
+      "id": 52,
+      "panels": [],
+      "title": "Netzwerk · Bridges",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Physische Schnittstellen und Bridges nicht zu einem Gesamtdurchsatz addieren.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 88
+      },
+      "id": 53,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{interface=\"vmbr0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{interface=\"vmbr0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "vmbr0 · Empfangen / Senden",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 88
+      },
+      "id": 54,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{interface=\"vmbr0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler RX",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{interface=\"vmbr0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler TX",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{interface=\"vmbr0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen RX",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{interface=\"vmbr0\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen TX",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "vmbr0 · Fehler / verworfene Pakete",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Physische Schnittstellen und Bridges nicht zu einem Gesamtdurchsatz addieren.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 95
+      },
+      "id": 55,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_recv{interface=\"vmbr1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfangen",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_bytes_sent{interface=\"vmbr1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "vmbr1 · Empfangen / Senden",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 95
+      },
+      "id": 56,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_in{interface=\"vmbr1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler RX",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_err_out{interface=\"vmbr1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler TX",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_in{interface=\"vmbr1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen RX",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(rate(net_drop_out{interface=\"vmbr1\",job=\"proxmox-pve\"}[$__rate_interval])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Verworfen TX",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "vmbr1 · Fehler / verworfene Pakete",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 102
+      },
+      "id": 21,
+      "panels": [],
+      "title": "Hardware und Dienste",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Bewertet nur frisch gemeldete Laufwerke. Fehlende Datenträger separat anhand der Laufwerksliste und Datenalter prüfen.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Fehler"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 103
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "min(((last_over_time(smartctl_health_ok{job=\"proxmox-pve\"}[15m])) and on(job,host_id,serial) ((last_over_time(smart_collection_snapshot_available{job=\"proxmox-pve\"}[3m]) == 1) and (time() - last_over_time(smart_collection_snapshot_timestamp{job=\"proxmox-pve\"}[24h]) <= 900))) and on(job,instance) (up{job=\"proxmox-pve\"} == 1))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "Schlechtester gemeldeter SMART-Status",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Schlechtester gemeldeter SMART-Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "yellow",
+                "value": 180
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 103
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(time() - last_over_time(smart_collection_snapshot_timestamp{job=\"proxmox-pve\"}[24h]))",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "SMART · älteste Meldung",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "SMART · älteste Meldung",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 103
+      },
+      "id": 24,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((last_over_time(smartctl_health_ok{job=\"proxmox-pve\"}[15m])) and on(job,host_id,serial) ((last_over_time(smart_collection_snapshot_available{job=\"proxmox-pve\"}[3m]) == 1) and (time() - last_over_time(smart_collection_snapshot_timestamp{job=\"proxmox-pve\"}[24h]) <= 900))) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "SMART · pro Laufwerk",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "device_id": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host": true,
+              "host_id": true,
+              "instance": true,
+              "job": true,
+              "role": true,
+              "type": true,
+              "wwn": true
+            },
+            "renameByName": {
+              "Value": "Gesund",
+              "device": "Gerät",
+              "model": "Modell",
+              "name": "Gerät",
+              "serial": "Seriennummer"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 109
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(sensors_temp_input{job=\"proxmox-pve\"}) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{chip}} · {{feature}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Temperaturen · Sensoren",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 109
+      },
+      "id": 26,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((last_over_time(smartctl_temperature{job=\"proxmox-pve\"}[15m])) and on(job,host_id,serial) ((last_over_time(smart_collection_snapshot_available{job=\"proxmox-pve\"}[3m]) == 1) and (time() - last_over_time(smart_collection_snapshot_timestamp{job=\"proxmox-pve\"}[24h]) <= 900))) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{name}}{{device}} · {{serial}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Temperaturen · Laufwerke",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 116
+      },
+      "id": 27,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(systemd_units_active_code{job=\"proxmox-pve\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dienste · Zustand",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "__name__": true,
+              "collector": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host": true,
+              "host_id": true,
+              "instance": true,
+              "job": true,
+              "load": true,
+              "preset": true,
+              "role": true
+            },
+            "renameByName": {
+              "active": "Zustand",
+              "name": "Dienst",
+              "state": "Starttyp",
+              "sub": "Unterzustand"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "NRestarts zählt automatische Neustarts; manuelle Neustarts sind nicht vollständig enthalten.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 116
+      },
+      "id": 28,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(last_over_time(systemd_units_restarts{job=\"proxmox-pve\"}[3m])) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Dienste · automatische Neustarts",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "active": true,
+              "collector": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host": true,
+              "host_id": true,
+              "instance": true,
+              "job": true,
+              "load": true,
+              "preset": true,
+              "role": true,
+              "state": true,
+              "sub": true
+            },
+            "renameByName": {
+              "Value": "NRestarts",
+              "name": "Dienst"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 124
+      },
+      "id": 29,
+      "panels": [],
+      "title": "Proxmox · VMs und Storage",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_MON_INFLUX_PVE}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mem"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "maxmem"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "disk"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "maxdisk"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cpu"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "uptime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 125
+      },
+      "id": 30,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_MON_INFLUX_PVE}"
+          },
+          "query": "from(bucket: v.defaultBucket) |> range(start: -3m) |> filter(fn: (r) => r._measurement == \"system\" and r.object == \"qemu\" and (r._field == \"name\" or r._field == \"status\" or r._field == \"cpu\" or r._field == \"cpus\" or r._field == \"mem\" or r._field == \"maxmem\" or r._field == \"uptime\" or r._field == \"disk\" or r._field == \"maxdisk\")) |> last() |> pivot(rowKey: [\"nodename\", \"vmid\", \"host\"], columnKey: [\"_field\"], valueColumn: \"_value\") |> keep(columns: [\"nodename\", \"vmid\", \"host\", \"name\", \"status\", \"cpu\", \"cpus\", \"mem\", \"maxmem\", \"uptime\", \"disk\", \"maxdisk\"]) |> group()",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "VMs · native Proxmox-Werte",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "renameByName": {
+              "host": "VM",
+              "nodename": "Host",
+              "status": "Status",
+              "vmid": "VM-ID"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_MON_INFLUX_PVE}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "used"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "avail"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "disk"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "maxdisk"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 135
+      },
+      "id": 31,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_MON_INFLUX_PVE}"
+          },
+          "query": "from(bucket: v.defaultBucket) |> range(start: -3m) |> filter(fn: (r) => r._measurement == \"system\" and r.object == \"storages\" and (r._field == \"used\" or r._field == \"total\" or r._field == \"avail\" or r._field == \"active\" or r._field == \"disk\" or r._field == \"maxdisk\")) |> last() |> pivot(rowKey: [\"nodename\", \"host\"], columnKey: [\"_field\"], valueColumn: \"_value\") |> keep(columns: [\"nodename\", \"host\", \"type\", \"active\", \"used\", \"total\", \"avail\", \"disk\", \"maxdisk\"]) |> group()",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Storage · native Proxmox-Werte",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "renameByName": {
+              "host": "Storage",
+              "nodename": "Host"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 143
+      },
+      "id": 32,
+      "panels": [],
+      "title": "SMART · Laufwerksidentität",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_MON_INFLUX_PVE}"
+      },
+      "description": "Identität aus den letzten 24 Stunden; keine Aussage zu aktueller Hardwarefrische oder Gesundheit. Dafür die getrennten SMART-Status- und Altersanzeigen verwenden.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "capacity"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 144
+      },
+      "id": 33,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_MON_INFLUX_PVE}"
+          },
+          "query": "from(bucket: v.defaultBucket) |> range(start: -24h) |> filter(fn: (r) => r._measurement == \"smartctl\" and r.host_id == \"proxmox-pve\" and r._field == \"capacity\") |> last() |> pivot(rowKey: [\"host_id\", \"name\"], columnKey: [\"_field\"], valueColumn: \"_value\") |> keep(columns: [\"name\", \"model\", \"serial\", \"wwn\", \"capacity\"]) |> group()",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "SMART · Laufwerksidentität",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "renameByName": {
+              "model": "Modell",
+              "name": "Gerät",
+              "serial": "Seriennummer",
+              "wwn": "WWN"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "decimals": 0,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "suffix: U/min"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 152
+      },
+      "id": 34,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(octo_channel_rpm{job=\"proxmox-pve\"}) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{channel}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Lüfter · gemessene OCTO-Kanäle (U/min)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 152
+      },
+      "id": 35,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * btrfs_allocation_bytes_used{job=\"proxmox-pve\"} / btrfs_allocation_total_bytes{job=\"proxmox-pve\"}) and on(job,instance) (up{job=\"proxmox-pve\"} == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{kind}} · {{fs_uuid}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Btrfs · Allokation",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 159
+      },
+      "id": 36,
+      "panels": [],
+      "title": "Protokolle",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Unveränderte Host-Rohprotokolle als Rückfallebene. Aufbereitete Dienst-/Fehlerübersichten stehen zusätzlich unten; SSH und Firewall werden separat ohne Rohmeldungen zusammengefasst.",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 160
+      },
+      "id": 37,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host_id=\"proxmox-pve\"}",
+          "maxLines": 150,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Alle Hostprotokolle",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Je Rechner, Quell-IP und Ergebnis: Ereignisanzahl sowie erste/letzte gespeicherte Loki-Ereigniszeit im gewählten Zeitraum (Millisekunden). Höchstens 200 Gruppen nach Anzahl; keine Rohmeldungen. Gezählt werden Accepted/Failed-Entscheidungen; Invalid-user/PAM-Echos werden nicht zusätzlich gezählt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            }
+          },
+          "noValue": "—"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Erstmals"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Zuletzt"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 170
+      },
+      "id": 38,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Anzahl"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace((topk(200, sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxmox-pve\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed`[$__range])))), \"value_kind\", \"count\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace(((min_over_time({host_id=\"proxmox-pve\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)) and on (host,source_ip,outcome) (topk(200, sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxmox-pve\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed`[$__range]))))), \"value_kind\", \"first\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace(((max_over_time({host_id=\"proxmox-pve\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)) and on (host,source_ip,outcome) (topk(200, sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxmox-pve\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` or service_name=~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service`) | regexp `(?i)^(?P<auth_decision>Accepted|Failed) (?:password|publickey|keyboard-interactive(?:/pam)?|hostbased|none) for .* from (?P<source_ip>[0-9A-Fa-f:.]+) port [0-9]+(?:\\s|$)` | source_ip!=\"\" | label_format outcome=`{{ .auth_decision | lower }}` | outcome=~`accepted|failed`[$__range]))))), \"value_kind\", \"last\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "C"
+        }
+      ],
+      "title": "SSH · Quellen und Anmeldeergebnis",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns",
+            "valueLabel": "value_kind"
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "exclude": {
+              "names": [
+                "Time",
+                "value_kind"
+              ]
+            }
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "value_kind": true
+            },
+            "indexByName": {
+              "Value #A": 3,
+              "Value #B": 4,
+              "Value #C": 5,
+              "count": 3,
+              "first": 4,
+              "host": 0,
+              "last": 5,
+              "outcome": 2,
+              "source_ip": 1
+            },
+            "renameByName": {
+              "Value #A": "Anzahl",
+              "Value #B": "Erstmals",
+              "Value #C": "Zuletzt",
+              "count": "Anzahl",
+              "first": "Erstmals",
+              "host": "Rechner",
+              "last": "Zuletzt",
+              "outcome": "Ergebnis",
+              "source_ip": "Quell-IP"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Je Rechner, Quell-IP und Ergebnis: Ereignisanzahl sowie erste/letzte gespeicherte Loki-Ereigniszeit im gewählten Zeitraum (Millisekunden). Höchstens 200 Gruppen nach Anzahl; keine Rohmeldungen. Die Quelle stammt ausschließlich aus dem strukturierten SRC-Feld; UFW BLOCK wird als DROP geführt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            }
+          },
+          "noValue": "—"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Erstmals"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Zuletzt"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 180
+      },
+      "id": 39,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Anzahl"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace((topk(200, sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxmox-pve\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}`[$__range])))), \"value_kind\", \"count\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace(((min_over_time({host_id=\"proxmox-pve\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)) and on (host,source_ip,outcome) (topk(200, sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxmox-pve\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}`[$__range]))))), \"value_kind\", \"first\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "label_replace(((max_over_time({host_id=\"proxmox-pve\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}` | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]) by (host,source_ip,outcome)) and on (host,source_ip,outcome) (topk(200, sum by (host,source_ip,outcome) (count_over_time({host_id=\"proxmox-pve\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (source=~`pve-firewall|pvefw|kernel|iptables|nftables|ufw` or service=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?` or service_name=~`kernel|pve-firewall(?:\\.service)?|pvefw-logger(?:\\.service)?|nftables(?:\\.service)?|ufw(?:\\.service)?`) | service!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` | service_name!~`sshd(?:-session|-auth)?|ssh(?:d)?\\.service` |~ `(?i)\\b(?:DROP|REJECT|UFW BLOCK)\\b` | regexp `(?i)\\b(?P<decision>DROP|REJECT|BLOCK)\\b` | regexp `\\bSRC=(?P<source_ip>[0-9A-Fa-f:.]+)(?:\\s|$)` | source_ip!=\"\" | decision!=\"\" | label_format outcome=`{{ if eq (.decision | upper) \"REJECT\" }}REJECT{{ else }}DROP{{ end }}`[$__range]))))), \"value_kind\", \"last\", \"host\", \".*\")",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "instant",
+          "refId": "C"
+        }
+      ],
+      "title": "Firewall · Quellen und DROP / REJECT",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns",
+            "valueLabel": "value_kind"
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "exclude": {
+              "names": [
+                "Time",
+                "value_kind"
+              ]
+            }
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "value_kind": true
+            },
+            "indexByName": {
+              "Value #A": 3,
+              "Value #B": 4,
+              "Value #C": 5,
+              "count": 3,
+              "first": 4,
+              "host": 0,
+              "last": 5,
+              "outcome": 2,
+              "source_ip": 1
+            },
+            "renameByName": {
+              "Value #A": "Anzahl",
+              "Value #B": "Erstmals",
+              "Value #C": "Zuletzt",
+              "count": "Anzahl",
+              "first": "Erstmals",
+              "host": "Rechner",
+              "last": "Zuletzt",
+              "outcome": "Ergebnis",
+              "source_ip": "Quell-IP"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Einzelne endgültige Systemd-Dienstfehler aus Journal-/Syslogquellen: gespeicherte Ereigniszeit, Rechner, Dienst, feste Fehlerklasse und bekannte Quellseverity. Keine Rohmeldungen, Befehle oder Anmeldewerte; Snapshot-Dienste sind ausgeschlossen. Systemd wird bei der endgültigen Failed-with-result-Meldung erfasst; Folge-/PAM-/Invalid-user-Echos sind keine zusätzlichen Fehlerzeilen.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            }
+          },
+          "noValue": "—"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 190
+      },
+      "id": 40,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Zeit"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host_id=\"proxmox-pve\",source=~\"journal|syslog|systemd-journal|\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` |~ `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`systemd(?:\\.service)?|init` or service_name=~`systemd(?:\\.service)?|init`) | regexp `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | failed_unit!=\"\" | label_format event_service=`{{ .failed_unit }}` | event_service=~`[A-Za-z0-9_.@:-]{1,160}` | event_service!=\"unknown_service\" | event_service!~`(?i)connection[-_]snapshot` | label_format event_severity=`{{ $s := .level | default .severity | default .priority | lower }}{{ if or (eq $s \"emerg\") (eq $s \"alert\") (eq $s \"crit\") (eq $s \"critical\") (eq $s \"panic\") (eq $s \"0\") (eq $s \"1\") (eq $s \"2\") }}critical{{ else if or (eq $s \"err\") (eq $s \"error\") (eq $s \"fatal\") (eq $s \"3\") }}error{{ else if or (eq $s \"warn\") (eq $s \"warning\") (eq $s \"4\") }}warning{{ else if or (eq $s \"notice\") (eq $s \"info\") (eq $s \"5\") (eq $s \"6\") }}info{{ else if .failed_unit }}error{{ else }}unknown{{ end }}` | label_format error_category=\"service_failed\" | line_format `{\"host\":\"{{ .host }}\",\"service\":\"{{ .event_service }}\",\"error_category\":\"{{ .error_category }}\",\"severity\":\"{{ .event_severity }}\",\"event_ns\":\"{{ __timestamp__ | unixEpochNanos }}\"}`",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "range",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host_id=\"proxmox-pve\",job=\"systemd-journal\",source!~\"journal|syslog|systemd-journal|\"} | source!=\"connection_snapshot\" | service!~`(?i)connection[-_]snapshot` | service_name!~`(?i)connection[-_]snapshot` !~ `(?i)connection[-_]snapshot` |~ `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | label_format host=`{{ if .host }}{{ .host }}{{ else }}{{ .host_id }}{{ end }}` | host=~`[A-Za-z0-9_.:-]{1,128}` | (service=~`systemd(?:\\.service)?|init` or service_name=~`systemd(?:\\.service)?|init`) | regexp `^(?P<failed_unit>[A-Za-z0-9_.@:-]+\\.service): Failed with result` | failed_unit!=\"\" | label_format event_service=`{{ .failed_unit }}` | event_service=~`[A-Za-z0-9_.@:-]{1,160}` | event_service!=\"unknown_service\" | event_service!~`(?i)connection[-_]snapshot` | label_format event_severity=`{{ $s := .level | default .severity | default .priority | lower }}{{ if or (eq $s \"emerg\") (eq $s \"alert\") (eq $s \"crit\") (eq $s \"critical\") (eq $s \"panic\") (eq $s \"0\") (eq $s \"1\") (eq $s \"2\") }}critical{{ else if or (eq $s \"err\") (eq $s \"error\") (eq $s \"fatal\") (eq $s \"3\") }}error{{ else if or (eq $s \"warn\") (eq $s \"warning\") (eq $s \"4\") }}warning{{ else if or (eq $s \"notice\") (eq $s \"info\") (eq $s \"5\") (eq $s \"6\") }}info{{ else if .failed_unit }}error{{ else }}unknown{{ end }}` | label_format error_category=\"service_failed\" | line_format `{\"host\":\"{{ .host }}\",\"service\":\"{{ .event_service }}\",\"error_category\":\"{{ .error_category }}\",\"severity\":\"{{ .event_severity }}\",\"event_ns\":\"{{ __timestamp__ | unixEpochNanos }}\"}`",
+          "legendFormat": "",
+          "maxLines": 200,
+          "queryType": "range",
+          "refId": "B"
+        }
+      ],
+      "title": "Dienstfehler · einzelne Ereignisse",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "json",
+            "keepTime": true,
+            "replace": true,
+            "source": "Line"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "event_ns": true,
+              "id": true,
+              "labels": true,
+              "tsNs": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "error_category": 3,
+              "host": 1,
+              "service": 2,
+              "severity": 4
+            },
+            "renameByName": {
+              "Time": "Zeit",
+              "error_category": "Fehlerklasse",
+              "host": "Rechner",
+              "service": "Dienst",
+              "severity": "Schweregrad"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 42,
+  "tags": [
+    "Monitoring",
+    "Hostansichten"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Proxmox · Hostübersicht",
+  "weekStart": "",
+  "uid": "mon-pve",
+  "id": null,
+  "version": 0,
+  "__inputs": [
+    {
+      "name": "DS_MON_INFLUX_PVE",
+      "label": "InfluxDB · mon-influx-pve",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    },
+    {
+      "name": "DS_MON_LOKI",
+      "label": "Loki · mon-loki",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "loki",
+      "pluginName": "Loki"
+    },
+    {
+      "name": "DS_MON_PROMETHEUS",
+      "label": "Prometheus · mon-prometheus",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ]
+}

@@ -1,0 +1,1200 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Detaillierte UniFi-Messwerte für das interne Monitoring.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "UniFi-Ordner",
+      "tooltip": "",
+      "type": "link",
+      "url": "/dashboards/f/mon-unifi-folder/unifi"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Übersicht",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-unifi"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Internet und WAN",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-unifi-wan"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Ports und Leistung",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-unifi-ports"
+    },
+    {
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "targetBlank": false,
+      "title": "Geräte und System",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/mon-unifi-devices"
+    }
+  ],
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Gemeldete Statuszahlen bleiben je Standort und Subsystem getrennt; Kategorien werden nicht miteinander summiert.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "cellHeight": "md",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(site_name,subsystem,status,device_state) (label_replace(((unifipoller_site_adopted{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_site_adopted{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_site_adopted{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))),\"device_state\",\"Adoptiert\",\"site_name\",\".*\") or label_replace(((unifipoller_site_disconnected{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_site_disconnected{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_site_disconnected{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))),\"device_state\",\"Getrennt\",\"site_name\",\".*\") or label_replace(((unifipoller_site_pending{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_site_pending{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_site_pending{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))),\"device_state\",\"Ausstehend\",\"site_name\",\".*\") or label_replace(((unifipoller_site_disabled{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_site_disabled{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_site_disabled{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))),\"device_state\",\"Deaktiviert\",\"site_name\",\".*\"))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "Gerätestatus",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Gerätestatus · nach Bereich",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "instance": true,
+              "job": true,
+              "source": true,
+              "tag": true
+            },
+            "indexByName": {
+              "Value": 4,
+              "Value #A": 5,
+              "device_state": 2,
+              "site_name": 0,
+              "status": 3,
+              "subsystem": 1
+            },
+            "renameByName": {
+              "Value": "Wert",
+              "Value #A": "Wert",
+              "band": "Band",
+              "category": "Kategorie",
+              "device_state": "Zustand",
+              "name": "Gerät",
+              "port": "Anschluss",
+              "port_num": "Port",
+              "radio": "Funktyp",
+              "radio_name": "Funkmodul",
+              "site_name": "Standort",
+              "station_type": "Kategorie",
+              "status": "Status",
+              "subsystem": "Bereich",
+              "temp_area": "Messort",
+              "temp_type": "Sensor",
+              "type": "Gerätetyp"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "WLAN und LAN sowie Nutzer, Gäste, IoT und Stationen sind getrennte Kategorien. Die Kategorien werden wegen möglicher Überschneidungen nicht zusammengerechnet.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "cellHeight": "md",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(site_name,subsystem,status,category) (label_replace(((unifipoller_site_users{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"} and ((time()-timestamp(unifipoller_site_users{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"})) >= 0) and ((time()-timestamp(unifipoller_site_users{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))),\"category\",\"Nutzer\",\"site_name\",\".*\") or label_replace(((unifipoller_site_guests{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"} and ((time()-timestamp(unifipoller_site_guests{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"})) >= 0) and ((time()-timestamp(unifipoller_site_guests{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))),\"category\",\"Gäste\",\"site_name\",\".*\") or label_replace(((unifipoller_site_iots{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"} and ((time()-timestamp(unifipoller_site_iots{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"})) >= 0) and ((time()-timestamp(unifipoller_site_iots{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))),\"category\",\"IoT\",\"site_name\",\".*\") or label_replace(((unifipoller_site_stations{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"} and ((time()-timestamp(unifipoller_site_stations{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"})) >= 0) and ((time()-timestamp(unifipoller_site_stations{job=\"unpoller-unifi\",site_name=~\"${site:regex}\",subsystem=~\"wlan|lan\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))),\"category\",\"Stationen\",\"site_name\",\".*\"))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "Teilnehmer",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "WLAN / LAN · Teilnehmerkategorien",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "instance": true,
+              "job": true,
+              "source": true,
+              "tag": true
+            },
+            "indexByName": {
+              "Value": 4,
+              "Value #A": 5,
+              "category": 2,
+              "site_name": 0,
+              "status": 3,
+              "subsystem": 1
+            },
+            "renameByName": {
+              "Value": "Wert",
+              "Value #A": "Wert",
+              "band": "Band",
+              "category": "Kategorie",
+              "device_state": "Zustand",
+              "name": "Gerät",
+              "port": "Anschluss",
+              "port_num": "Port",
+              "radio": "Funktyp",
+              "radio_name": "Funkmodul",
+              "site_name": "Standort",
+              "station_type": "Kategorie",
+              "status": "Status",
+              "subsystem": "Bereich",
+              "temp_area": "Messort",
+              "temp_type": "Sensor",
+              "type": "Gerätetyp"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Echter Byte-Counter als Rate über 5 Minuten, danach Tag-Duplikate per max entfernt und in Bit/s umgerechnet. Keine Summe über Geräte und keine WAN-Behauptung.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "8 * max by(site_name,name,type) (rate(unifipoller_device_receive_bytes_total{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"}[5m]) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180)) and ((time()-timestamp(unifipoller_device_receive_bytes_total{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_device_receive_bytes_total{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{name}} · Empfang",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Geräte · Empfang je Gerät",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Rate vor Aggregation berücksichtigt Counter-Resets. Switch-, Gateway- und AP-Verkehr können denselben Datenfluss mehrfach abbilden.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "8 * max by(site_name,name,type) (rate(unifipoller_device_transmit_bytes_total{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"}[5m]) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180)) and ((time()-timestamp(unifipoller_device_transmit_bytes_total{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_device_transmit_bytes_total{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{name}} · Senden",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Geräte · Senden je Gerät",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Je Gerät maximaler gemeldeter Laufzeitwert; keine Client-Information.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 17
+      },
+      "id": 15,
+      "options": {
+        "cellHeight": "md",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(site_name,name,type) (((unifipoller_device_uptime_seconds{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_device_uptime_seconds{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_device_uptime_seconds{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "Laufzeit",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Geräte · Laufzeiten",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "instance": true,
+              "job": true,
+              "source": true,
+              "tag": true
+            },
+            "indexByName": {
+              "Value": 3,
+              "Value #A": 4,
+              "name": 1,
+              "site_name": 0,
+              "type": 2
+            },
+            "renameByName": {
+              "Value": "Wert",
+              "Value #A": "Wert",
+              "band": "Band",
+              "category": "Kategorie",
+              "device_state": "Zustand",
+              "name": "Gerät",
+              "port": "Anschluss",
+              "port_num": "Port",
+              "radio": "Funktyp",
+              "radio_name": "Funkmodul",
+              "site_name": "Standort",
+              "station_type": "Kategorie",
+              "status": "Status",
+              "subsystem": "Bereich",
+              "temp_area": "Messort",
+              "temp_type": "Sensor",
+              "type": "Gerätetyp"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Ratio-Metrik in Prozent umgerechnet; fehlende Geräteserien bleiben fehlend.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 17
+      },
+      "id": 16,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "100 * max by(site_name,name,type) (((unifipoller_device_cpu_utilization_ratio{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_device_cpu_utilization_ratio{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_device_cpu_utilization_ratio{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{name}} · CPU",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Geräte · CPU-Auslastung",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Keine Ersetzung unbekannter Auslastung durch null.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 26
+      },
+      "id": 17,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "100 * max by(site_name,name,type) (((unifipoller_device_memory_utilization_ratio{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_device_memory_utilization_ratio{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_device_memory_utilization_ratio{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{name}} · RAM",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Geräte · RAM-Auslastung",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Gemittelte Anzahl ausführbarer oder ununterbrechbar wartender Prozesse über 1, 5 und 15 Minuten. Kein Prozentwert.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 26
+      },
+      "id": 30,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(site_name,name,type) (((unifipoller_device_load_average_1{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_device_load_average_1{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_device_load_average_1{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{name}} · 1 min",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(site_name,name,type) (((unifipoller_device_load_average_5{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_device_load_average_5{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_device_load_average_5{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{name}} · 5 min",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(site_name,name,type) (((unifipoller_device_load_average_15{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_device_load_average_15{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_device_load_average_15{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{name}} · 15 min",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Geräte · Systemlast",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Temperaturen nach Infrastrukturgerät und Sensor. Messorte bleiben getrennt.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 35
+      },
+      "id": 31,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(site_name,name,type,temp_area,temp_type) (((unifipoller_device_temperature_celsius{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"} and ((time()-timestamp(unifipoller_device_temperature_celsius{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) >= 0) and ((time()-timestamp(unifipoller_device_temperature_celsius{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"})) < 180)) and on() ((min((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180))) == 1) and on() (min((unifipoller_controller_up{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_controller_up{job=\"unpoller-unifi\"})) < 180)) and on(job,instance) ((up{job=\"unpoller-unifi\"} and ((time()-timestamp(up{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(up{job=\"unpoller-unifi\"})) < 180)) == 1)) == 1) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) >= 0) and on() (max((unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"} and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) >= 0) and ((time()-timestamp(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"})) < 180))) < 180))))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{name}} · {{temp_area}} · {{temp_type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Geräte · Temperaturfühler",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 2,
+            "spanNulls": false
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 35
+      },
+      "id": 45,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (site_name,name,type) (unifipoller_device_memory_used_bytes{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"}) and on() (max(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"}) >= 0 and max(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"}) < 180)",
+          "instant": false,
+          "legendFormat": "Belegt · {{name}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by (site_name,name,type) (unifipoller_device_memory_installed_bytes{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"}) and on() (max(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"}) >= 0 and max(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"}) < 180)",
+          "instant": false,
+          "legendFormat": "Installiert · {{name}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Arbeitsspeicher · belegt und eingebaut",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Status der UniFi-Konsole, ohne Versionsdaten.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "Update verfügbar",
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "text": "Nein"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "Ja"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange"
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 44
+      },
+      "id": 46,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(unifipoller_controller_update_available{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"}) and on() (max(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"}) >= 0 and max(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"}) < 180)",
+          "instant": true,
+          "legendFormat": "Update verfügbar",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Update verfügbar",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Ein aktivierter Plan belegt keinen erfolgreichen letzten Lauf.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "displayName": "Automatische Sicherung",
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "text": "Nein"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "Ja"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange"
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 44
+      },
+      "id": 47,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(unifipoller_controller_autobackup_enabled{job=\"unpoller-unifi\",site_name=~\"${site:regex}\"}) and on() (max(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"}) >= 0 and max(unifipoller_prometheus_cache_age_seconds{job=\"unpoller-unifi\"}) < 180)",
+          "instant": true,
+          "legendFormat": "Automatische Sicherung",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Automatische Sicherung",
+      "type": "stat"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 42,
+  "tags": [
+    "monitoring",
+    "unifi",
+    "betrieb"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": ".+",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_MON_PROMETHEUS}"
+        },
+        "includeAll": true,
+        "label": "Standort",
+        "multi": true,
+        "name": "site",
+        "options": [],
+        "query": "label_values({job=\"unpoller-unifi\",__name__=~\"unifipoller_site_aps|unifipoller_site_gateways|unifipoller_site_switches\"}, site_name)",
+        "refresh": 2,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "30s",
+      "1m",
+      "2m",
+      "5m"
+    ]
+  },
+  "timezone": "browser",
+  "title": "UniFi · Geräte und System",
+  "weekStart": "",
+  "uid": "mon-unifi-devices",
+  "id": null,
+  "version": 0,
+  "__inputs": [
+    {
+      "name": "DS_MON_PROMETHEUS",
+      "label": "Prometheus · mon-prometheus",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ]
+}

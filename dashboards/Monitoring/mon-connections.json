@@ -1,0 +1,4267 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [
+    {
+      "includeVars": false,
+      "keepTime": true,
+      "targetBlank": false,
+      "title": "Betriebsübersicht",
+      "type": "link",
+      "url": "/d/mon-operations"
+    },
+    {
+      "includeVars": false,
+      "keepTime": true,
+      "targetBlank": false,
+      "title": "Loganalyse",
+      "type": "link",
+      "url": "/d/mon-logs"
+    },
+    {
+      "includeVars": false,
+      "keepTime": true,
+      "targetBlank": false,
+      "title": "Bisherige Übersicht",
+      "type": "link",
+      "url": "/d/mon-overview"
+    },
+    {
+      "includeVars": false,
+      "keepTime": true,
+      "targetBlank": false,
+      "title": "Proxmox",
+      "type": "link",
+      "url": "/d/mon-pve"
+    },
+    {
+      "includeVars": false,
+      "keepTime": true,
+      "targetBlank": false,
+      "title": "DNS",
+      "type": "link",
+      "url": "/d/mon-dns"
+    },
+    {
+      "includeVars": false,
+      "keepTime": true,
+      "targetBlank": false,
+      "title": "Proxy",
+      "type": "link",
+      "url": "/d/mon-proxy"
+    }
+  ],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "content": "## Verbindungen und Netzwerk\n**60-Sekunden-Momentaufnahmen**, keine Paketaufzeichnung. Tabellen zeigen jüngste Sichtungen aus maximal 90 Sekunden, nach Socket-Schlüssel zusammengefasst. Kurze Verbindungen können fehlen; verschwundene Verbindungen bleiben bis zum Ende dieses Fensters sichtbar. UDP-Bindings beweisen keinen Datenfluss. Prozessdaten und Richtung können unbekannt sein; 'vermutlich' ist eine Heuristik. Schnittstellenraten sind keine Bytezahlen einzelner Sockets. Kennzahlen summieren ausgewählte Rechner mit frischer Erfassung; die Zeitanzeige zeigt die älteste frische Momentaufnahme.",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 2,
+      "panels": [],
+      "title": "Aktualität, Grenzen und Abdeckung",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "dateTimeFromNow"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 6
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "min(max by(host) (last_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\" | kind=\"summary\" | json v=\"observed_at_unix_ms\" | unwrap v | __error__=\"\" [3m])))",
+          "legendFormat": "Erfasst",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Erfasst",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 6
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum(max by(host) (last_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\" | kind=\"summary\" | json v=\"observed_total\" | unwrap v | __error__=\"\" [3m])))",
+          "legendFormat": "Sockets · beobachtet",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Sockets · beobachtet",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 6
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum(max by(host) (last_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\" | kind=\"summary\" | json v=\"emitted_total\" | unwrap v | __error__=\"\" [3m])))",
+          "legendFormat": "Sockets · bereitgestellt",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Sockets · bereitgestellt",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 6
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum(max by(host) (last_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\" | kind=\"summary\" | json v=\"process_visible_total\" | unwrap v | __error__=\"\" [3m])))",
+          "legendFormat": "Mit Prozessdaten",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Mit Prozessdaten",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 11
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum(max by(host) (last_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\" | kind=\"summary\" | json v=\"parse_errors\" | unwrap v | __error__=\"\" [3m])))",
+          "legendFormat": "Parserfehler",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Parserfehler",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 11
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 28
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "max(max by(host) (last_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\" | kind=\"summary\" | json v=\"capture_ms\" | unwrap v | __error__=\"\" [3m])))",
+          "legendFormat": "Erfassungsdauer",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Erfassungsdauer",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Zeit des Erfassungsberichts in Loki. Erkannt = beobachtete Sockets; angezeigt = bereitgestellte Datensätze. Eine begrenzte Datenmenge ist kein Parserfehler. Leere Tabelle: kein passender Problembericht im gewählten Zeitraum; Aktualität weiterhin oben prüfen. Höchstens 50 Berichte.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            }
+          },
+          "noValue": "Nicht gemeldet"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Zeit"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsLocal"
+              },
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Rechner"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "dashboard": {
+                        "text": "Dashboard"
+                      },
+                      "dns": {
+                        "text": "DNS"
+                      },
+                      "proxy": {
+                        "text": "Proxy"
+                      },
+                      "pve": {
+                        "text": "Proxmox"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Begrenzt": {
+                        "color": "orange",
+                        "text": "Begrenzt"
+                      },
+                      "Erfassungsfehler": {
+                        "color": "red",
+                        "text": "Erfassungsfehler"
+                      },
+                      "Parserfehler": {
+                        "color": "red",
+                        "text": "Parserfehler"
+                      },
+                      "Unvollständig": {
+                        "color": "orange",
+                        "text": "Unvollständig"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 9,
+      "options": {
+        "cellHeight": "md",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\", complete=\"complete\", truncated=\"truncated\", seen=\"observed_total\", emitted=\"emitted_total\", errors=\"parse_errors\", exitcode=\"ss_exit_code\", reason=\"limit_reason\" | kind=\"summary\" | __error__=\"\" | (complete!=\"true\" or truncated=\"true\" or errors!=\"0\" or exitcode!=\"0\") | line_format `{\"host\":{{printf \"%q\" .host}},\"report_status\":\"{{if and (ne .exitcode \"\") (ne .exitcode \"0\")}}Erfassungsfehler{{else if and (ne .errors \"\") (ne .errors \"0\")}}Parserfehler{{else if eq .truncated \"true\"}}Begrenzt{{else}}Unvollständig{{end}}\",\"observed_total\":{{if .seen}}{{.seen}}{{else}}null{{end}},\"emitted_total\":{{if .emitted}}{{.emitted}}{{else}}null{{end}},\"parse_errors\":{{if .errors}}{{.errors}}{{else}}null{{end}},\"reason_text\":\"{{if eq .reason \"payload_byte_limit\"}}Datenmenge begrenzt die Ausgabe{{else if and (ne .exitcode \"\") (ne .exitcode \"0\")}}Erfassung meldet einen Fehlercode{{else if and (ne .errors \"\") (ne .errors \"0\")}}Zeilen konnten nicht ausgewertet werden{{else}}Grund nicht eindeutig gemeldet{{end}}\"}`",
+          "legendFormat": "",
+          "maxLines": 50,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Erfassungsprobleme · verständliche Ereignisse",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "json",
+            "keepTime": true,
+            "replace": true,
+            "source": "Line"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Time",
+                "host",
+                "report_status",
+                "observed_total",
+                "emitted_total",
+                "parse_errors",
+                "reason_text"
+              ]
+            }
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "number",
+                "targetField": "observed_total"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "number",
+                "targetField": "emitted_total"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "number",
+                "targetField": "parse_errors"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "Time"
+              }
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "Time": 0,
+              "emitted_total": 4,
+              "host": 1,
+              "observed_total": 3,
+              "parse_errors": 5,
+              "reason_text": 6,
+              "report_status": 2
+            },
+            "renameByName": {
+              "Time": "Zeit",
+              "emitted_total": "Angezeigt",
+              "host": "Rechner",
+              "observed_total": "Erkannt",
+              "parse_errors": "Parserfehler",
+              "reason_text": "Grund",
+              "report_status": "Status"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Socketlisten · jüngste Sichtungen",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Bis zu 2000 Logzeilen aus 90 Sekunden vor der Deduplizierung. Bei engerem Filter oder einem Rechner werden mehr einzelne Sockets sichtbar; bei Datenbegrenzung Erfassungsstatus beachten.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:observed_at_unix_ms.*|Zuletzt\\ gesehen)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Zuletzt gesehen"
+              },
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              },
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:host_id.*|Rechner)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Rechner"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 105
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:protocol.*|Protokoll)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Protokoll"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:family.*|IP\\-Version)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "IP-Version"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 85
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:state.*|Zustand)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Zustand"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 105
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:local_ip.*|Lokale\\ IP)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lokale IP"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:local_port.*|Lokaler\\ Port)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lokaler Port"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:peer_ip.*|Gegenstelle)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gegenstelle"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:peer_port.*|Gegenport)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gegenport"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:process_names.*|Prozesse)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Prozesse"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "noValue",
+                "value": "unbekannt"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "": {
+                        "color": "gray",
+                        "text": "unbekannt"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:process_pids.*|PIDs)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PIDs"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "noValue",
+                "value": "unbekannt"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "": {
+                        "color": "gray",
+                        "text": "unbekannt"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:socket_uid.*|Socket\\-UID)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Socket-UID"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:direction.*|Richtung)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Richtung"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "inbound_likely": {
+                        "text": "vermutlich eingehend"
+                      },
+                      "listener": {
+                        "text": "Listener"
+                      },
+                      "outbound_likely": {
+                        "text": "vermutlich ausgehend"
+                      },
+                      "unknown": {
+                        "text": "unbekannt"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:direction_method.*|Richtungsbeleg)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Richtungsbeleg"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:local_zone.*|Lokales\\ Netz)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lokales Netz"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:peer_zone.*|Gegennetz)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gegennetz"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:process_metadata_available.*|Prozessdaten\\ sichtbar)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Prozessdaten sichtbar"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 11,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json | kind=\"socket\" | protocol=\"tcp\" | socket_kind!=\"listener\" | process_names=~`.*${process:regex}.*` | peer_ip=~`.*${peer:regex}.*` | local_port=~`.*${port:regex}.*`",
+          "legendFormat": "",
+          "maxLines": 2000,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "90s",
+      "title": "TCP · Verbindungen und Abschlusszustände",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "json",
+            "keepTime": true,
+            "replace": true,
+            "source": "Line"
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": false,
+                "field": "observed_at_unix_ms"
+              }
+            ]
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "direction": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "direction_method": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "family": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "host_id": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "local_ip": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "local_port": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "local_zone": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "observed_at_unix_ms": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "peer_ip": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "peer_port": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "peer_zone": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "process_metadata_available": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "process_names": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "process_pids": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "protocol": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "socket_key": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "socket_uid": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "state": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": true,
+              "collector": true,
+              "herkunft": true,
+              "id": true,
+              "interface": true,
+              "kind": true,
+              "labels": true,
+              "level": true,
+              "observed_at": true,
+              "peer_interface": true,
+              "process_count": true,
+              "processes": true,
+              "processes_truncated": true,
+              "snapshot_id": true,
+              "socket_key": true,
+              "socket_kind": true,
+              "source": true,
+              "tsNs": true
+            },
+            "indexByName": {
+              "direction": 12,
+              "direction (lastNotNull)": 12,
+              "direction_method": 13,
+              "direction_method (lastNotNull)": 13,
+              "family": 3,
+              "family (lastNotNull)": 3,
+              "host_id": 1,
+              "host_id (lastNotNull)": 1,
+              "local_ip": 5,
+              "local_ip (lastNotNull)": 5,
+              "local_port": 6,
+              "local_port (lastNotNull)": 6,
+              "local_zone": 14,
+              "local_zone (lastNotNull)": 14,
+              "observed_at_unix_ms": 0,
+              "observed_at_unix_ms (lastNotNull)": 0,
+              "peer_ip": 7,
+              "peer_ip (lastNotNull)": 7,
+              "peer_port": 8,
+              "peer_port (lastNotNull)": 8,
+              "peer_zone": 15,
+              "peer_zone (lastNotNull)": 15,
+              "process_metadata_available": 16,
+              "process_metadata_available (lastNotNull)": 16,
+              "process_names": 9,
+              "process_names (lastNotNull)": 9,
+              "process_pids": 10,
+              "process_pids (lastNotNull)": 10,
+              "protocol": 2,
+              "protocol (lastNotNull)": 2,
+              "socket_uid": 11,
+              "socket_uid (lastNotNull)": 11,
+              "state": 4,
+              "state (lastNotNull)": 4
+            },
+            "renameByName": {
+              "direction": "Richtung",
+              "direction (lastNotNull)": "Richtung",
+              "direction_method": "Richtungsbeleg",
+              "direction_method (lastNotNull)": "Richtungsbeleg",
+              "family": "IP-Version",
+              "family (lastNotNull)": "IP-Version",
+              "host_id": "Rechner",
+              "host_id (lastNotNull)": "Rechner",
+              "local_ip": "Lokale IP",
+              "local_ip (lastNotNull)": "Lokale IP",
+              "local_port": "Lokaler Port",
+              "local_port (lastNotNull)": "Lokaler Port",
+              "local_zone": "Lokales Netz",
+              "local_zone (lastNotNull)": "Lokales Netz",
+              "observed_at_unix_ms": "Zuletzt gesehen",
+              "observed_at_unix_ms (lastNotNull)": "Zuletzt gesehen",
+              "peer_ip": "Gegenstelle",
+              "peer_ip (lastNotNull)": "Gegenstelle",
+              "peer_port": "Gegenport",
+              "peer_port (lastNotNull)": "Gegenport",
+              "peer_zone": "Gegennetz",
+              "peer_zone (lastNotNull)": "Gegennetz",
+              "process_metadata_available": "Prozessdaten sichtbar",
+              "process_metadata_available (lastNotNull)": "Prozessdaten sichtbar",
+              "process_names": "Prozesse",
+              "process_names (lastNotNull)": "Prozesse",
+              "process_pids": "PIDs",
+              "process_pids (lastNotNull)": "PIDs",
+              "protocol": "Protokoll",
+              "protocol (lastNotNull)": "Protokoll",
+              "socket_uid": "Socket-UID",
+              "socket_uid (lastNotNull)": "Socket-UID",
+              "state": "Zustand",
+              "state (lastNotNull)": "Zustand"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": true,
+                "field": "Zuletzt gesehen"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Ein Listener ist ein gebundener Socket; Firewall, TLS oder Anmeldung können den Zugang weiterhin blockieren.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:observed_at_unix_ms.*|Zuletzt\\ gesehen)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Zuletzt gesehen"
+              },
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              },
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:host_id.*|Rechner)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Rechner"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 105
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:protocol.*|Protokoll)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Protokoll"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:family.*|IP\\-Version)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "IP-Version"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 85
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:state.*|Zustand)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Zustand"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 105
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:local_ip.*|Lokale\\ IP)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lokale IP"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:local_port.*|Lokaler\\ Port)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lokaler Port"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:peer_ip.*|Gegenstelle)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gegenstelle"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:peer_port.*|Gegenport)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gegenport"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:process_names.*|Prozesse)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Prozesse"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "noValue",
+                "value": "unbekannt"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "": {
+                        "color": "gray",
+                        "text": "unbekannt"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:process_pids.*|PIDs)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PIDs"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "noValue",
+                "value": "unbekannt"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "": {
+                        "color": "gray",
+                        "text": "unbekannt"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:socket_uid.*|Socket\\-UID)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Socket-UID"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:direction.*|Richtung)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Richtung"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "inbound_likely": {
+                        "text": "vermutlich eingehend"
+                      },
+                      "listener": {
+                        "text": "Listener"
+                      },
+                      "outbound_likely": {
+                        "text": "vermutlich ausgehend"
+                      },
+                      "unknown": {
+                        "text": "unbekannt"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:direction_method.*|Richtungsbeleg)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Richtungsbeleg"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:local_zone.*|Lokales\\ Netz)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lokales Netz"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:peer_zone.*|Gegennetz)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gegennetz"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:process_metadata_available.*|Prozessdaten\\ sichtbar)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Prozessdaten sichtbar"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
+      "id": 12,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json | kind=\"socket\" | socket_kind=\"listener\" | process_names=~`.*${process:regex}.*` | peer_ip=~`.*${peer:regex}.*` | local_port=~`.*${port:regex}.*`",
+          "legendFormat": "",
+          "maxLines": 2000,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "90s",
+      "title": "TCP · wartende Listener",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "json",
+            "keepTime": true,
+            "replace": true,
+            "source": "Line"
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": false,
+                "field": "observed_at_unix_ms"
+              }
+            ]
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "direction": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "direction_method": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "family": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "host_id": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "local_ip": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "local_port": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "local_zone": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "observed_at_unix_ms": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "peer_ip": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "peer_port": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "peer_zone": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "process_metadata_available": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "process_names": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "process_pids": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "protocol": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "socket_key": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "socket_uid": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "state": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": true,
+              "collector": true,
+              "herkunft": true,
+              "id": true,
+              "interface": true,
+              "kind": true,
+              "labels": true,
+              "level": true,
+              "observed_at": true,
+              "peer_interface": true,
+              "process_count": true,
+              "processes": true,
+              "processes_truncated": true,
+              "snapshot_id": true,
+              "socket_key": true,
+              "socket_kind": true,
+              "source": true,
+              "tsNs": true
+            },
+            "indexByName": {
+              "direction": 12,
+              "direction (lastNotNull)": 12,
+              "direction_method": 13,
+              "direction_method (lastNotNull)": 13,
+              "family": 3,
+              "family (lastNotNull)": 3,
+              "host_id": 1,
+              "host_id (lastNotNull)": 1,
+              "local_ip": 5,
+              "local_ip (lastNotNull)": 5,
+              "local_port": 6,
+              "local_port (lastNotNull)": 6,
+              "local_zone": 14,
+              "local_zone (lastNotNull)": 14,
+              "observed_at_unix_ms": 0,
+              "observed_at_unix_ms (lastNotNull)": 0,
+              "peer_ip": 7,
+              "peer_ip (lastNotNull)": 7,
+              "peer_port": 8,
+              "peer_port (lastNotNull)": 8,
+              "peer_zone": 15,
+              "peer_zone (lastNotNull)": 15,
+              "process_metadata_available": 16,
+              "process_metadata_available (lastNotNull)": 16,
+              "process_names": 9,
+              "process_names (lastNotNull)": 9,
+              "process_pids": 10,
+              "process_pids (lastNotNull)": 10,
+              "protocol": 2,
+              "protocol (lastNotNull)": 2,
+              "socket_uid": 11,
+              "socket_uid (lastNotNull)": 11,
+              "state": 4,
+              "state (lastNotNull)": 4
+            },
+            "renameByName": {
+              "direction": "Richtung",
+              "direction (lastNotNull)": "Richtung",
+              "direction_method": "Richtungsbeleg",
+              "direction_method (lastNotNull)": "Richtungsbeleg",
+              "family": "IP-Version",
+              "family (lastNotNull)": "IP-Version",
+              "host_id": "Rechner",
+              "host_id (lastNotNull)": "Rechner",
+              "local_ip": "Lokale IP",
+              "local_ip (lastNotNull)": "Lokale IP",
+              "local_port": "Lokaler Port",
+              "local_port (lastNotNull)": "Lokaler Port",
+              "local_zone": "Lokales Netz",
+              "local_zone (lastNotNull)": "Lokales Netz",
+              "observed_at_unix_ms": "Zuletzt gesehen",
+              "observed_at_unix_ms (lastNotNull)": "Zuletzt gesehen",
+              "peer_ip": "Gegenstelle",
+              "peer_ip (lastNotNull)": "Gegenstelle",
+              "peer_port": "Gegenport",
+              "peer_port (lastNotNull)": "Gegenport",
+              "peer_zone": "Gegennetz",
+              "peer_zone (lastNotNull)": "Gegennetz",
+              "process_metadata_available": "Prozessdaten sichtbar",
+              "process_metadata_available (lastNotNull)": "Prozessdaten sichtbar",
+              "process_names": "Prozesse",
+              "process_names (lastNotNull)": "Prozesse",
+              "process_pids": "PIDs",
+              "process_pids (lastNotNull)": "PIDs",
+              "protocol": "Protokoll",
+              "protocol (lastNotNull)": "Protokoll",
+              "socket_uid": "Socket-UID",
+              "socket_uid (lastNotNull)": "Socket-UID",
+              "state": "Zustand",
+              "state (lastNotNull)": "Zustand"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": true,
+                "field": "Zuletzt gesehen"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "UDP besitzt keinen TCP-Verbindungszustand. Wildcard oder fehlende Gegenstelle bedeutet nicht automatisch Verkehr zu allen Rechnern.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:observed_at_unix_ms.*|Zuletzt\\ gesehen)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Zuletzt gesehen"
+              },
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              },
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:host_id.*|Rechner)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Rechner"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 105
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:protocol.*|Protokoll)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Protokoll"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:family.*|IP\\-Version)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "IP-Version"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 85
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:state.*|Zustand)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Zustand"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 105
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:local_ip.*|Lokale\\ IP)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lokale IP"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:local_port.*|Lokaler\\ Port)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lokaler Port"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:peer_ip.*|Gegenstelle)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gegenstelle"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:peer_port.*|Gegenport)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gegenport"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:process_names.*|Prozesse)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Prozesse"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "noValue",
+                "value": "unbekannt"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "": {
+                        "color": "gray",
+                        "text": "unbekannt"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:process_pids.*|PIDs)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PIDs"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "noValue",
+                "value": "unbekannt"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "": {
+                        "color": "gray",
+                        "text": "unbekannt"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:socket_uid.*|Socket\\-UID)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Socket-UID"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:direction.*|Richtung)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Richtung"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "inbound_likely": {
+                        "text": "vermutlich eingehend"
+                      },
+                      "listener": {
+                        "text": "Listener"
+                      },
+                      "outbound_likely": {
+                        "text": "vermutlich ausgehend"
+                      },
+                      "unknown": {
+                        "text": "unbekannt"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:direction_method.*|Richtungsbeleg)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Richtungsbeleg"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:local_zone.*|Lokales\\ Netz)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lokales Netz"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:peer_zone.*|Gegennetz)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gegennetz"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^(?:process_metadata_available.*|Prozessdaten\\ sichtbar)$"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Prozessdaten sichtbar"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 49
+      },
+      "id": 13,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json | kind=\"socket\" | protocol=\"udp\" | process_names=~`.*${process:regex}.*` | peer_ip=~`.*${peer:regex}.*` | local_port=~`.*${port:regex}.*`",
+          "legendFormat": "",
+          "maxLines": 2000,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "90s",
+      "title": "UDP · Bindings und verbundene Sockets",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "json",
+            "keepTime": true,
+            "replace": true,
+            "source": "Line"
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": false,
+                "field": "observed_at_unix_ms"
+              }
+            ]
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "direction": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "direction_method": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "family": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "host_id": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "local_ip": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "local_port": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "local_zone": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "observed_at_unix_ms": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "peer_ip": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "peer_port": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "peer_zone": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "process_metadata_available": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "process_names": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "process_pids": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "protocol": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "socket_key": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "socket_uid": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "state": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": true,
+              "collector": true,
+              "herkunft": true,
+              "id": true,
+              "interface": true,
+              "kind": true,
+              "labels": true,
+              "level": true,
+              "observed_at": true,
+              "peer_interface": true,
+              "process_count": true,
+              "processes": true,
+              "processes_truncated": true,
+              "snapshot_id": true,
+              "socket_key": true,
+              "socket_kind": true,
+              "source": true,
+              "tsNs": true
+            },
+            "indexByName": {
+              "direction": 12,
+              "direction (lastNotNull)": 12,
+              "direction_method": 13,
+              "direction_method (lastNotNull)": 13,
+              "family": 3,
+              "family (lastNotNull)": 3,
+              "host_id": 1,
+              "host_id (lastNotNull)": 1,
+              "local_ip": 5,
+              "local_ip (lastNotNull)": 5,
+              "local_port": 6,
+              "local_port (lastNotNull)": 6,
+              "local_zone": 14,
+              "local_zone (lastNotNull)": 14,
+              "observed_at_unix_ms": 0,
+              "observed_at_unix_ms (lastNotNull)": 0,
+              "peer_ip": 7,
+              "peer_ip (lastNotNull)": 7,
+              "peer_port": 8,
+              "peer_port (lastNotNull)": 8,
+              "peer_zone": 15,
+              "peer_zone (lastNotNull)": 15,
+              "process_metadata_available": 16,
+              "process_metadata_available (lastNotNull)": 16,
+              "process_names": 9,
+              "process_names (lastNotNull)": 9,
+              "process_pids": 10,
+              "process_pids (lastNotNull)": 10,
+              "protocol": 2,
+              "protocol (lastNotNull)": 2,
+              "socket_uid": 11,
+              "socket_uid (lastNotNull)": 11,
+              "state": 4,
+              "state (lastNotNull)": 4
+            },
+            "renameByName": {
+              "direction": "Richtung",
+              "direction (lastNotNull)": "Richtung",
+              "direction_method": "Richtungsbeleg",
+              "direction_method (lastNotNull)": "Richtungsbeleg",
+              "family": "IP-Version",
+              "family (lastNotNull)": "IP-Version",
+              "host_id": "Rechner",
+              "host_id (lastNotNull)": "Rechner",
+              "local_ip": "Lokale IP",
+              "local_ip (lastNotNull)": "Lokale IP",
+              "local_port": "Lokaler Port",
+              "local_port (lastNotNull)": "Lokaler Port",
+              "local_zone": "Lokales Netz",
+              "local_zone (lastNotNull)": "Lokales Netz",
+              "observed_at_unix_ms": "Zuletzt gesehen",
+              "observed_at_unix_ms (lastNotNull)": "Zuletzt gesehen",
+              "peer_ip": "Gegenstelle",
+              "peer_ip (lastNotNull)": "Gegenstelle",
+              "peer_port": "Gegenport",
+              "peer_port (lastNotNull)": "Gegenport",
+              "peer_zone": "Gegennetz",
+              "peer_zone (lastNotNull)": "Gegennetz",
+              "process_metadata_available": "Prozessdaten sichtbar",
+              "process_metadata_available (lastNotNull)": "Prozessdaten sichtbar",
+              "process_names": "Prozesse",
+              "process_names (lastNotNull)": "Prozesse",
+              "process_pids": "PIDs",
+              "process_pids (lastNotNull)": "PIDs",
+              "protocol": "Protokoll",
+              "protocol (lastNotNull)": "Protokoll",
+              "socket_uid": "Socket-UID",
+              "socket_uid (lastNotNull)": "Socket-UID",
+              "state": "Zustand",
+              "state (lastNotNull)": "Zustand"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": true,
+                "field": "Zuletzt gesehen"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 59
+      },
+      "id": 14,
+      "panels": [],
+      "title": "Beobachtungen · keine aktuellen Einzelverbindungs-Zähler",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Top 20 Nicht-Loopback-Gegenstellen von TCP-Sockets im Zustand ESTAB. Wiederholte Snapshots zählen erneut; dies sind Sichtungen, keine neuen Verbindungen. Gegenstellenfilter oben gilt als Textsuche. Andere Zustände und UDP stehen in den Socketlisten.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 60
+      },
+      "id": 15,
+      "options": {
+        "cellHeight": "md",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "topk(20, sum by(host,peer_ip) (count_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\",protocol=\"protocol\",state=\"state\",peer_ip=\"peer_ip\",peer_zone=\"peer_zone\" | kind=\"socket\" | protocol=\"tcp\" | state=\"ESTAB\" | peer_ip!=\"\" | peer_ip!=\"*\" | peer_zone!=\"loopback\" | line_format \"{{.peer_ip}}\" |= ${peer:doublequote} | __error__=\"\" | keep host,peer_ip [5m])))",
+          "legendFormat": "",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Aktive TCP-Gegenstellen · Sichtungen in 5 Minuten",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "cpu": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host_id": true,
+              "job": true,
+              "kind": true,
+              "role": true
+            },
+            "indexByName": {
+              "Value": 3,
+              "Value #A": 4,
+              "host": 0,
+              "local_port": 2,
+              "peer_ip": 1
+            },
+            "renameByName": {
+              "DPT": "Zielport",
+              "PROTO": "Protokoll",
+              "Value": "Sichtungen",
+              "Value #A": "Sichtungen",
+              "direction": "Richtung",
+              "host": "Rechner",
+              "http_status": "HTTP-Status",
+              "instance": "Ziel",
+              "interface": "Schnittstelle",
+              "level": "Stufe",
+              "local_port": "Lokaler Port",
+              "local_zone": "Lokales Netz",
+              "method": "Methode",
+              "peer_ip": "Gegenstelle",
+              "peer_zone": "Gegennetz",
+              "priority": "Priorität",
+              "process_names": "Prozesse",
+              "protocol": "Protokoll",
+              "service_name": "Dienst",
+              "source": "Quelle",
+              "state": "Zustand",
+              "status": "Status",
+              "task_type": "Aufgabentyp"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Ein Socket kann mehrere Prozesse haben. Prozessnamen werden nicht als persistente Loki-Labels gespeichert.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 60
+      },
+      "id": 16,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "topk(20, sum by(host,process_names) (count_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\", process_names=\"process_names\" | kind=\"socket\" | process_names!=\"\" [5m])))",
+          "legendFormat": "",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Prozesse mit Socket-Sichtungen · 5 Minuten",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "cpu": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host_id": true,
+              "job": true,
+              "kind": true,
+              "role": true
+            },
+            "indexByName": {
+              "DPT": 14,
+              "PROTO": 15,
+              "Value": 2,
+              "Value #A": 3,
+              "direction": 6,
+              "host": 0,
+              "http_status": 21,
+              "instance": 1,
+              "interface": 16,
+              "level": 19,
+              "local_port": 8,
+              "local_zone": 10,
+              "method": 12,
+              "peer_ip": 7,
+              "peer_zone": 9,
+              "priority": 20,
+              "process_names": 11,
+              "protocol": 4,
+              "service_name": 17,
+              "source": 18,
+              "state": 5,
+              "status": 13,
+              "task_type": 22
+            },
+            "renameByName": {
+              "DPT": "Zielport",
+              "PROTO": "Protokoll",
+              "Value": "Wert",
+              "Value #A": "Wert",
+              "direction": "Richtung",
+              "host": "Rechner",
+              "http_status": "HTTP-Status",
+              "instance": "Ziel",
+              "interface": "Schnittstelle",
+              "level": "Stufe",
+              "local_port": "Lokaler Port",
+              "local_zone": "Lokales Netz",
+              "method": "Methode",
+              "peer_ip": "Gegenstelle",
+              "peer_zone": "Gegennetz",
+              "priority": "Priorität",
+              "process_names": "Prozesse",
+              "protocol": "Protokoll",
+              "service_name": "Dienst",
+              "source": "Quelle",
+              "state": "Zustand",
+              "status": "Status",
+              "task_type": "Aufgabentyp"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Top 25 tatsächlich lauschende TCP-Ports (LISTEN). Kurzlebige Clientports werden vor dem Zählen ausgeschlossen. Der Portfilter oben gilt als Textsuche. Jeder Snapshot zählt erneut: Sichtungen, keine neuen Verbindungen. UDP-Bindings stehen in der eigenen Tabelle weiter oben.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 69
+      },
+      "id": 17,
+      "options": {
+        "cellHeight": "md",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "topk(25, sum by(host,protocol,local_port) (count_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\",protocol=\"protocol\",state=\"state\",local_port=\"local_port\" | kind=\"socket\" | protocol=\"tcp\" | state=\"LISTEN\" | local_port=~\"[0-9]{1,5}\" | line_format \"{{.local_port}}\" |= ${port:doublequote} | __error__=\"\" | keep host,protocol,local_port [5m])))",
+          "legendFormat": "",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "TCP-Lauschports · Sichtungen in 5 Minuten",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "cpu": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host_id": true,
+              "job": true,
+              "kind": true,
+              "role": true
+            },
+            "indexByName": {
+              "Value": 3,
+              "Value #A": 4,
+              "host": 0,
+              "local_port": 2,
+              "protocol": 1
+            },
+            "renameByName": {
+              "DPT": "Zielport",
+              "PROTO": "Protokoll",
+              "Value": "Sichtungen",
+              "Value #A": "Sichtungen",
+              "direction": "Richtung",
+              "host": "Rechner",
+              "http_status": "HTTP-Status",
+              "instance": "Ziel",
+              "interface": "Schnittstelle",
+              "level": "Stufe",
+              "local_port": "Lokaler Port",
+              "local_zone": "Lokales Netz",
+              "method": "Methode",
+              "peer_ip": "Gegenstelle",
+              "peer_zone": "Gegennetz",
+              "priority": "Priorität",
+              "process_names": "Prozesse",
+              "protocol": "Protokoll",
+              "service_name": "Dienst",
+              "source": "Quelle",
+              "state": "Zustand",
+              "status": "Status",
+              "task_type": "Aufgabentyp"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Richtung nur anhand Socket-Zustand oder vorhandener Listener abgeleitet; kein Mitschnitt.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 69
+      },
+      "id": 18,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by(host,protocol,state,direction) (count_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\", protocol=\"protocol\", state=\"state\", direction=\"direction\" | kind=\"socket\" [5m]))",
+          "legendFormat": "",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Protokoll / Zustand / Richtung · Sichtungen",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "cpu": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host_id": true,
+              "job": true,
+              "kind": true,
+              "role": true
+            },
+            "indexByName": {
+              "DPT": 14,
+              "PROTO": 15,
+              "Value": 2,
+              "Value #A": 3,
+              "direction": 6,
+              "host": 0,
+              "http_status": 21,
+              "instance": 1,
+              "interface": 16,
+              "level": 19,
+              "local_port": 8,
+              "local_zone": 10,
+              "method": 12,
+              "peer_ip": 7,
+              "peer_zone": 9,
+              "priority": 20,
+              "process_names": 11,
+              "protocol": 4,
+              "service_name": 17,
+              "source": 18,
+              "state": 5,
+              "status": 13,
+              "task_type": 22
+            },
+            "renameByName": {
+              "DPT": "Zielport",
+              "PROTO": "Protokoll",
+              "Value": "Wert",
+              "Value #A": "Wert",
+              "direction": "Richtung",
+              "host": "Rechner",
+              "http_status": "HTTP-Status",
+              "instance": "Ziel",
+              "interface": "Schnittstelle",
+              "level": "Stufe",
+              "local_port": "Lokaler Port",
+              "local_zone": "Lokales Netz",
+              "method": "Methode",
+              "peer_ip": "Gegenstelle",
+              "peer_zone": "Gegennetz",
+              "priority": "Priorität",
+              "process_names": "Prozesse",
+              "protocol": "Protokoll",
+              "service_name": "Dienst",
+              "source": "Quelle",
+              "state": "Zustand",
+              "status": "Status",
+              "task_type": "Aufgabentyp"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 78
+      },
+      "id": 19,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by(host,local_zone,peer_zone) (count_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\", local_zone=\"local_zone\", peer_zone=\"peer_zone\" | kind=\"socket\" [5m]))",
+          "legendFormat": "",
+          "maxLines": 150,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Lokales Netz → Gegennetz · Sichtungen",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "collector": true,
+              "cpu": true,
+              "exported_host": true,
+              "exported_host_id": true,
+              "exported_role": true,
+              "host_id": true,
+              "job": true,
+              "kind": true,
+              "role": true
+            },
+            "indexByName": {
+              "DPT": 14,
+              "PROTO": 15,
+              "Value": 2,
+              "Value #A": 3,
+              "direction": 6,
+              "host": 0,
+              "http_status": 21,
+              "instance": 1,
+              "interface": 16,
+              "level": 19,
+              "local_port": 8,
+              "local_zone": 10,
+              "method": 12,
+              "peer_ip": 7,
+              "peer_zone": 9,
+              "priority": 20,
+              "process_names": 11,
+              "protocol": 4,
+              "service_name": 17,
+              "source": 18,
+              "state": 5,
+              "status": 13,
+              "task_type": 22
+            },
+            "renameByName": {
+              "DPT": "Zielport",
+              "PROTO": "Protokoll",
+              "Value": "Wert",
+              "Value #A": "Wert",
+              "direction": "Richtung",
+              "host": "Rechner",
+              "http_status": "HTTP-Status",
+              "instance": "Ziel",
+              "interface": "Schnittstelle",
+              "level": "Stufe",
+              "local_port": "Lokaler Port",
+              "local_zone": "Lokales Netz",
+              "method": "Methode",
+              "peer_ip": "Gegenstelle",
+              "peer_zone": "Gegennetz",
+              "priority": "Priorität",
+              "process_names": "Prozesse",
+              "protocol": "Protokoll",
+              "service_name": "Dienst",
+              "source": "Quelle",
+              "state": "Zustand",
+              "status": "Status",
+              "task_type": "Aufgabentyp"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Punkte stammen aus dem begrenzten Sammler; ohne frische Metazeile wird Keine Daten angezeigt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 78
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "max by(host) (last_over_time({host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\" | kind=\"summary\" | json v=\"observed_total\" | unwrap v | __error__=\"\" [3m]))",
+          "legendFormat": "{{host}}",
+          "maxLines": 150,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Socketmenge je Rechner · Verlauf",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 86
+      },
+      "id": 21,
+      "panels": [],
+      "title": "Kontinuierliche Telegraf-Netzstatistik",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 87
+      },
+      "id": 22,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "netstat_tcp_established{host=~\"${host:regex}\",host=~\".+\"} and on(job,instance) (up == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "ESTABLISHED {{host}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "netstat_tcp_time_wait{host=~\"${host:regex}\",host=~\".+\"} and on(job,instance) (up == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "TIME_WAIT {{host}}",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "netstat_tcp_close_wait{host=~\"${host:regex}\",host=~\".+\"} and on(job,instance) (up == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "CLOSE_WAIT {{host}}",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "TCP · bestehend / TIME_WAIT / CLOSE_WAIT",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 87
+      },
+      "id": 23,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "netstat_tcp_syn_sent{host=~\"${host:regex}\",host=~\".+\"} and on(job,instance) (up == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "SYN_SENT {{host}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "netstat_tcp_syn_recv{host=~\"${host:regex}\",host=~\".+\"} and on(job,instance) (up == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "SYN_RECV {{host}}",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "netstat_tcp_listen{host=~\"${host:regex}\",host=~\".+\"} and on(job,instance) (up == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "LISTEN {{host}}",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "TCP · Verbindungsaufbau / Listener",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Die Anschlussauswahl oben bestimmt, welche Schnittstelle dieses Diagramm zeigt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 95
+      },
+      "id": 24,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum by(host,interface) (rate(net_bytes_recv{host=~\"${host:regex}\",host=~\".+\",interface!~\"lo|loopback\",interface=~\"${anschluss:regex}\"}[$__rate_interval]) and on(job,instance) (up == 1))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{host}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Schnittstellen · Empfang · ${anschluss}",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Die Anschlussauswahl oben bestimmt, welche Schnittstelle dieses Diagramm zeigt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 95
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum by(host,interface) (rate(net_bytes_sent{host=~\"${host:regex}\",host=~\".+\",interface!~\"lo|loopback\",interface=~\"${anschluss:regex}\"}[$__rate_interval]) and on(job,instance) (up == 1))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{host}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Schnittstellen · Senden · ${anschluss}",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Die Anschlussauswahl oben bestimmt, welche Schnittstelle dieses Diagramm zeigt.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 103
+      },
+      "id": 26,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum by(host,interface) (rate(net_err_in{host=~\"${host:regex}\",host=~\".+\",interface!~\"lo|loopback\",interface=~\"${anschluss:regex}\"}[$__rate_interval]) and on(job,instance) (up == 1))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler RX {{host}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum by(host,interface) (rate(net_err_out{host=~\"${host:regex}\",host=~\".+\",interface!~\"lo|loopback\",interface=~\"${anschluss:regex}\"}[$__rate_interval]) and on(job,instance) (up == 1))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Fehler TX {{host}}",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum by(host,interface) (rate(net_drop_in{host=~\"${host:regex}\",host=~\".+\",interface!~\"lo|loopback\",interface=~\"${anschluss:regex}\"}[$__rate_interval]) and on(job,instance) (up == 1))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Drops RX {{host}}",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum by(host,interface) (rate(net_drop_out{host=~\"${host:regex}\",host=~\".+\",interface!~\"lo|loopback\",interface=~\"${anschluss:regex}\"}[$__rate_interval]) and on(job,instance) (up == 1))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Drops TX {{host}}",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Fehler / Drops je Schnittstelle · ${anschluss}",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MON_PROMETHEUS}"
+      },
+      "description": "Conntrack-Metriken wurden bisher nur für DNS nachgewiesen. Keine Daten ist für andere Rechner erwartbar und kein Nullwert.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 103
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * conntrack_ip_conntrack_count{host=~\"${host:regex}\",host=~\".+\"} / conntrack_ip_conntrack_max{host=~\"${host:regex}\",host=~\".+\"}) and on(job,instance) (up == 1)",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{host}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Conntrack · Auslastung, soweit vorhanden",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 111
+      },
+      "id": 28,
+      "panels": [],
+      "title": "Rohe Metadaten zur Nachprüfung",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Enthält vollständige Zähler, Prozessabdeckung, Begrenzungsgrund und Snapshot-ID. Keine Zugangsdaten oder Paketinhalte.",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 112
+      },
+      "id": 29,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host=~\"${host:regex}\",host=~\".+\"} |~ `\"collector\"\\s*:\\s*\"connection_snapshot\"` | json kind=\"kind\" | kind=\"summary\"",
+          "legendFormat": "",
+          "maxLines": 50,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Letzte Erfassungsberichte",
+      "type": "logs"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 42,
+  "tags": [
+    "monitoring",
+    "betrieb",
+    "erweitert-20261121"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": ".+",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "includeAll": true,
+        "label": "Rechner",
+        "multi": true,
+        "name": "host",
+        "options": [],
+        "query": "Proxmox : pve, DNS : dns, Proxy : proxy, Dashboard : dashboard",
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "label": "Prozess enthält",
+        "name": "process",
+        "options": [],
+        "query": "",
+        "type": "textbox"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "label": "Gegenstelle enthält",
+        "name": "peer",
+        "options": [],
+        "query": "",
+        "type": "textbox"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "label": "Lokaler Port enthält",
+        "name": "port",
+        "options": [],
+        "query": "",
+        "type": "textbox"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_MON_PROMETHEUS}"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Anschluss",
+        "multi": false,
+        "name": "anschluss",
+        "options": [],
+        "query": "label_values(net_bytes_recv{host=~\"${host:regex}\",host=~\".+\",interface!~\"lo|loopback\"}, interface)",
+        "refresh": 1,
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "30s",
+      "1m",
+      "2m",
+      "5m"
+    ]
+  },
+  "timezone": "browser",
+  "title": "Netzwerk · Verbindungen und Gegenstellen",
+  "weekStart": "",
+  "uid": "mon-connections",
+  "id": null,
+  "version": 0,
+  "__inputs": [
+    {
+      "name": "DS_MON_LOKI",
+      "label": "Loki · mon-loki",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "loki",
+      "pluginName": "Loki"
+    },
+    {
+      "name": "DS_MON_PROMETHEUS",
+      "label": "Prometheus · mon-prometheus",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ]
+}

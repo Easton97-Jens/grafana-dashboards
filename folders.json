@@ -1,0 +1,114 @@
+{
+  "folders": [
+    {
+      "path": "Monitoring",
+      "resource": {
+        "kind": "Folder",
+        "apiVersion": "folder.grafana.app/v1",
+        "metadata": {
+          "name": "mon-overview",
+          "annotations": {}
+        },
+        "spec": {
+          "title": "Monitoring"
+        }
+      }
+    },
+    {
+      "path": "Monitoring/DNS",
+      "resource": {
+        "kind": "Folder",
+        "apiVersion": "folder.grafana.app/v1",
+        "metadata": {
+          "name": "mon-host-dns",
+          "annotations": {
+            "grafana.app/folder": "mon-overview"
+          }
+        },
+        "spec": {
+          "title": "DNS"
+        }
+      }
+    },
+    {
+      "path": "Monitoring/Dashboard-PC",
+      "resource": {
+        "kind": "Folder",
+        "apiVersion": "folder.grafana.app/v1",
+        "metadata": {
+          "name": "mon-dashboard-folder",
+          "annotations": {
+            "grafana.app/folder": "mon-overview"
+          }
+        },
+        "spec": {
+          "title": "Dashboard-PC"
+        }
+      }
+    },
+    {
+      "path": "Monitoring/Netzwerkgeräte",
+      "resource": {
+        "kind": "Folder",
+        "apiVersion": "folder.grafana.app/v1",
+        "metadata": {
+          "name": "mon-network-devices",
+          "annotations": {
+            "grafana.app/folder": "mon-overview"
+          }
+        },
+        "spec": {
+          "title": "Netzwerkgeräte"
+        }
+      }
+    },
+    {
+      "path": "Monitoring/Proxmox",
+      "resource": {
+        "kind": "Folder",
+        "apiVersion": "folder.grafana.app/v1",
+        "metadata": {
+          "name": "mon-host-pve",
+          "annotations": {
+            "grafana.app/folder": "mon-overview"
+          }
+        },
+        "spec": {
+          "title": "Proxmox"
+        }
+      }
+    },
+    {
+      "path": "Monitoring/Proxy",
+      "resource": {
+        "kind": "Folder",
+        "apiVersion": "folder.grafana.app/v1",
+        "metadata": {
+          "name": "mon-host-proxy",
+          "annotations": {
+            "grafana.app/folder": "mon-overview"
+          }
+        },
+        "spec": {
+          "title": "Proxy"
+        }
+      }
+    },
+    {
+      "path": "Monitoring/UniFi",
+      "resource": {
+        "kind": "Folder",
+        "apiVersion": "folder.grafana.app/v1",
+        "metadata": {
+          "name": "mon-unifi-folder",
+          "annotations": {
+            "grafana.app/folder": "mon-overview"
+          }
+        },
+        "spec": {
+          "title": "UniFi"
+        }
+      }
+    }
+  ]
+}
