@@ -26,7 +26,7 @@ Die UID-Spalte dient ausschließlich der Zuordnung. Jede JSON-Datei enthält pas
 - Grafana 13.3.x mit den eingebauten Paneltypen; Ordnerhierarchie benötigt verschachtelte Ordner. Andere Versionen wurden mit diesem Export nicht geprüft.
 - Prometheus: vorhandene Host-/Telegraf-Metriken, Monitoring-Regeln und UniFi-Poller-Metriken. Statische Job- und Rollenlabels sind Teil der Abfragekonfiguration.
 - Loki liefert strukturierte Journal-, Sicherheits- und Verbindungsereignisse (`connection_snapshot`), UniFi-CEF (`unifi_cef`) und bereinigtes Syslog für ASUS und TP-Link. Parser und Logsammler sind eigene Komponenten.
-- Die [Einrichtung für TP-Link SX3008F](docs/tp-link-sx3008f.md) beschreibt SNMPv3, die Telegraf-Beispielkonfiguration, Prometheus und den Grafana-Import.
+- Die [Einrichtung für TP-Link SX3008F](docs/tp-link-sx3008f.md) beschreibt SNMPv3, Telegraf, Prometheus und den Grafana-Import. Das [Alloy-Beispiel](examples/alloy/tp-link-sx3008f.alloy) leitet die Systemmeldungen des Switches an Loki weiter.
 - InfluxDB: die in den Abfragen verwendeten Messungen, Felder und Bucketnamen müssen im eigenen System vorhanden sein. Erforderliche Rechte der Datenquellen: Lesen.
 - Netzwerkübersichten zählen teils wiederholte Sichtungen. Fehlende Daten sind keine gesunde Null. Beschreibungen der einzelnen Panels beachten.
 - Grafana-Benutzer, Rechte, anonyme Freigaben, Zertifikate, Alarmregeln und Export-/Empfangsdienste werden nicht importiert. Der Zugriff wird im eigenen Grafana eingerichtet.

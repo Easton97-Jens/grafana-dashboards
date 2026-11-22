@@ -1,0 +1,75 @@
+loki.relabel "tplink_syslog" {
+  forward_to = []
+
+  rule {
+    source_labels = ["__syslog_message_severity"]
+    target_label  = "syslog_severity"
+  }
+}
+
+loki.source.syslog "tplink" {
+  listener {
+    address                = coalesce(sys.env("TPLINK_SYSLOG_LISTEN"), "127.0.0.1:5514")
+    protocol               = "udp"
+    syslog_format          = "rfc3164"
+    use_incoming_timestamp = false
+    labels                 = { host = "tplink-switch", source = "tplink_syslog" }
+  }
+
+  relabel_rules = loki.relabel.tplink_syslog.rules
+  forward_to    = [loki.process.tplink_syslog.receiver]
+}
+
+loki.process "tplink_syslog" {
+  forward_to = [loki.write.tplink.receiver]
+
+  stage.template {
+    source   = "priority"
+    template = `{{- $severity := default "unknown" .syslog_severity -}}
+{{- if eq $severity "informational" -}}info{{- else -}}{{ $severity }}{{- end -}}`
+  }
+
+  stage.template {
+    source   = "event_type"
+    template = `{{- if regexMatch "(?i)\\blink\\s+(?:is\\s+)?down\\b" .Entry -}}link_down
+{{- else if regexMatch "(?i)\\blink\\s+(?:is\\s+)?up\\b" .Entry -}}link_up
+{{- else if regexMatch "(?i)\\b(?:login|authentication)\\s+(?:failed|denied|failure)\\b" .Entry -}}auth_failure
+{{- else -}}system_event{{- end -}}`
+  }
+
+  stage.template {
+    source   = "category"
+    template = `{{- if or (eq .event_type "link_down") (eq .event_type "link_up") -}}interfaces
+{{- else if eq .event_type "auth_failure" -}}authentication
+{{- else -}}system{{- end -}}`
+  }
+
+  stage.labels {
+    values = { category = "category" }
+  }
+
+  stage.label_keep {
+    values = ["host", "source", "category"]
+  }
+
+  stage.template {
+    source   = "normalized"
+    template = `{{ dict "category" .category "event_type" .event_type "priority" .priority "message" .Entry | mustToJson }}`
+  }
+
+  stage.output {
+    source = "normalized"
+  }
+}
+
+loki.write "tplink" {
+  endpoint {
+    url = coalesce(sys.env("TPLINK_LOKI_PUSH_URL"), "https://loki.example.invalid/loki/api/v1/push")
+
+    // Optional für einen HTTPS-Endpunkt mit HTTP Basic Auth.
+    // basic_auth {
+    //   username      = sys.env("TPLINK_LOKI_USER")
+    //   password_file = sys.env("TPLINK_LOKI_PASSWORD_FILE")
+    // }
+  }
+}

@@ -60,4 +60,30 @@ Kontrolliere in Prometheus **Status → Target health** und frage `up{job="teleg
 3. Wähle den Zielordner und ordne **Prometheus · mon-prometheus** deiner Prometheus-Datenquelle und **Loki · mon-loki** deiner Loki-Datenquelle zu.
 4. Klicke auf **Importieren** und öffne **Anschlussübersicht · Status und Verkehr**. Wähle im Portfilter einen Anschluss aus, um dessen Verlauf zu sehen. Die Tabelle zeigt die Übersicht aller erfassten Frontports.
 
-Die Systemprotokolle benötigen zusätzlich einen Syslog-Empfänger mit Weiterleitung an Loki. Die Loki-Abfragen erwarten die Stream-Labels `host="tplink-switch"`, `source="tplink_syslog"` und `category`. Die Tabellen lesen `category`, `priority` und `event_type` aus der JSON-Meldung. Bis zu dieser Anbindung bleiben die Log-Panels ohne Meldungen. [Grafana-Import](https://grafana.com/docs/grafana/latest/visualizations/dashboards/build-dashboards/import-dashboards/)
+Für die Systemprotokolle richte anschließend [Syslog mit Alloy und Loki](#5-systemmeldungen-mit-alloy-an-loki-senden) ein. [Grafana-Import](https://grafana.com/docs/grafana/latest/visualizations/dashboards/build-dashboards/import-dashboards/)
+
+## 5. Systemmeldungen mit Alloy an Loki senden
+
+Das [Alloy-Beispiel](../examples/alloy/tp-link-sx3008f.alloy) empfängt RFC3164-Syslog über UDP und wurde mit Alloy 1.22.0 geprüft. Alloy verwendet die Empfangszeit. Es erkennt typische Meldungen für Linkwechsel und fehlgeschlagene Anmeldung. Andere Meldungen bleiben als Systemereignis mit ihrem ursprünglichen Nachrichtentext sichtbar.
+
+1. Setze für den Alloy-Dienst `TPLINK_LOKI_PUSH_URL` auf deinen vollständigen Loki-Schreibendpunkt, zum Beispiel `https://loki.example.invalid/loki/api/v1/push`. Für HTTP Basic Auth über HTTPS aktiviere den auskommentierten Block im Beispiel. Setze `TPLINK_LOKI_USER` und `TPLINK_LOKI_PASSWORD_FILE` lokal. Die Passwortdatei muss für den Alloy-Dienst lesbar sein. Bei einem vorhandenen `loki.write`-Ziel kannst du stattdessen `forward_to` im Block `loki.process` auf dessen Empfänger umstellen und den Beispielblock `loki.write "tplink"` weglassen. Sende und lies bei Mehrmandantenbetrieb im selben Loki-Mandanten.
+2. Übernimm die Beispielblöcke in die Alloy-Konfiguration. Prüfe die vollständige Datei mit `alloy validate /etc/alloy/config.alloy` und lade den Dienst mit seiner lokalen Umgebung neu. Für den Test lauscht das Beispiel standardmäßig auf `127.0.0.1:5514`. Diese Einstellung ist vom Switch aus nicht erreichbar.
+3. Setze für den Empfang vom Switch `TPLINK_SYSLOG_LISTEN` auf die lokale Empfangsadresse und den benötigten UDP-Port. Begrenze den Zugang in der Firewall auf die Quelladresse des Switches. Aktiviere unter **Maintenance → Logs → Remote Logs** die Weiterleitung an den Alloy-Rechner und wähle die gewünschte Mindestpriorität. TP-Link verwendet standardmäßig UDP 514. Muss der Switch an diesen Port senden, verwende eine auf den Switch begrenzte Weiterleitung zum unprivilegierten Alloy-Port oder gib dem dedizierten Linux-Dienst gezielt `CAP_NET_BIND_SERVICE`, falls das System es für Port 514 verlangt. [TP-Link Remote Logs](https://www.tp-link.com/us/configuration-guides/configuring_system_logs/)
+
+Für einen lokalen Test bei aktivem Loopback-Listener sende eine synthetische Warnung. Verwende Netcat auf dem Alloy-Rechner.
+
+```sh
+printf '<132>%s switch-example tp-link: Port 1 link down (Test)\n' \
+  "$(LC_ALL=C date '+%b %e %T')" | nc -u -w 1 127.0.0.1 5514
+```
+
+Wähle danach in Grafana unter **Explore** die beim Dashboard-Import zugeordnete Loki-Datenquelle und frage die letzten fünf Minuten ab.
+
+```logql
+{host="tplink-switch",source="tplink_syslog",category="interfaces"}
+  | json syslog_priority="priority", event_type="event_type"
+  | syslog_priority="warning"
+  | event_type="link_down"
+```
+
+Die Meldung erscheint unter **Systemmeldungen** und **Fehler und Warnungen · einzelne Ereignisse**. Die Stream-Labels `host`, `source` und `category` sind auf wenige Werte begrenzt. Die JSON-Meldung enthält `category`, `event_type`, `priority` und `message`. Der ursprüngliche Nachrichtentext kann im eigenen Betrieb interne Angaben enthalten. Beschränke die Leserechte für diese Protokolle entsprechend. [Alloy Syslog-Empfang](https://grafana.com/docs/alloy/latest/reference/components/loki/loki.source.syslog/) · [Loki-Schreibziel](https://grafana.com/docs/alloy/latest/reference/components/loki/loki.write/)
