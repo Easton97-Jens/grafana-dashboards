@@ -1,7 +1,7 @@
 {
   "exported_at_utc": "2026-11-22T13:57:39Z",
   "grafana_version": "13.3.1",
-  "dashboard_count": 15,
+  "dashboard_count": 16,
   "folder_count": 7,
   "dashboards": [
     {
@@ -15,6 +15,19 @@
       ],
       "source_dashboard_version": 2,
       "refreshed_at_utc": "2026-11-22T14:09:35Z"
+    },
+    {
+      "path": "dashboards/Monitoring/Netzwerkgeräte/mon-tplink-sx3008f.json",
+      "uid": "mon-tplink-sx3008f",
+      "title": "TP-Link SX3008F · Anschlüsse und System",
+      "folder_uid": "mon-network-devices",
+      "panel_count": 26,
+      "datasource_inputs": [
+        "DS_MON_LOKI",
+        "DS_MON_PROMETHEUS"
+      ],
+      "source_dashboard_version": 4,
+      "refreshed_at_utc": "2026-11-22T15:59:12Z"
     },
     {
       "path": "dashboards/Monitoring/mon-connections.json",
@@ -183,7 +196,7 @@
     }
   ],
   "sanitization_counts": {
-    "RESET_VARIABLE_OPTIONS": 19,
+    "RESET_VARIABLE_OPTIONS": 20,
     "INTERFACE": 6,
     "SERVICE_URL": 1
   },

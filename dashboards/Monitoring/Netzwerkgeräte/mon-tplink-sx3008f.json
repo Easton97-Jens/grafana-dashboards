@@ -1,0 +1,2540 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [
+    {
+      "title": "Gesamtüberblick",
+      "type": "link",
+      "url": "/d/mon-overview"
+    },
+    {
+      "title": "Netzwerkgeräte",
+      "type": "link",
+      "url": "/dashboards/f/mon-network-devices/netzwerkgeraete"
+    },
+    {
+      "targetBlank": false,
+      "title": "ASUS · Systemprotokoll",
+      "type": "link",
+      "url": "/d/mon-asus-ap"
+    }
+  ],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "content": "**TP-Link SX3008F.** Die Ansicht zeigt eingegangene Systemmeldungen des Geräts.",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Empfangene Meldungen",
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 3
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 36
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "(sum(count_over_time({host=\"tplink-switch\",source=\"tplink_syslog\"} [$__range])) or vector(0))",
+          "maxLines": 250,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Empfangene Meldungen",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Letzter Empfang",
+          "noValue": "Keine Daten",
+          "unit": "dateTimeAsIso"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 3
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 36
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "max(max_over_time({host=\"tplink-switch\",source=\"tplink_syslog\"} | label_format event_ms=`{{ __timestamp__ | unixEpochMillis }}` | unwrap event_ms | __error__=\"\" [$__range]))",
+          "maxLines": 250,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Letzter Empfang",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Empfangene Meldungen",
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 12,
+        "y": 3
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 36
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "(sum(count_over_time({host=\"tplink-switch\",source=\"tplink_syslog\"} | json event_priority=\"priority\",event_kind=\"event_type\" | __error__=\"\" | event_priority=~\"emergency|alert|critical|error\" | keep event_priority [$__range])) or vector(0))",
+          "maxLines": 250,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Fehler und kritische Meldungen",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Empfangene Meldungen",
+          "noValue": "Keine Daten",
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 3
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 36
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "(sum(count_over_time({host=\"tplink-switch\",source=\"tplink_syslog\"} | json event_priority=\"priority\",event_kind=\"event_type\" | __error__=\"\" | event_priority=~\"warning\" | keep event_priority [$__range])) or vector(0))",
+          "maxLines": 250,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Warnungen",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Anzahl empfangener Meldungen in rollierenden 5-Minuten-Fenstern.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 42,
+            "lineWidth": 1,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by (category) (count_over_time({host=\"tplink-switch\",source=\"tplink_syslog\"} [5m]))",
+          "legendFormat": "{{category}}",
+          "maxLines": 150,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Meldungen im Verlauf · je Kategorie",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Quelllabel fehlt bei Teilen der Legacy-DNS-Daten; das bleibt ausdrücklich markiert.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kategorie"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "authentication": {
+                        "text": "Anmeldung"
+                      },
+                      "hardware": {
+                        "text": "Hardware"
+                      },
+                      "interfaces": {
+                        "text": "Anschlüsse"
+                      },
+                      "network": {
+                        "text": "Netzwerk"
+                      },
+                      "security": {
+                        "text": "Sicherheit"
+                      },
+                      "switching": {
+                        "text": "Switching"
+                      },
+                      "system": {
+                        "text": "System"
+                      },
+                      "unknown": {
+                        "text": "Unbekannt"
+                      },
+                      "wireless": {
+                        "text": "WLAN"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Stufe"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "alert": {
+                        "text": "Alarm"
+                      },
+                      "critical": {
+                        "text": "Kritisch"
+                      },
+                      "debug": {
+                        "text": "Debug"
+                      },
+                      "emergency": {
+                        "text": "Notfall"
+                      },
+                      "error": {
+                        "text": "Fehler"
+                      },
+                      "info": {
+                        "text": "Information"
+                      },
+                      "notice": {
+                        "text": "Hinweis"
+                      },
+                      "unknown": {
+                        "text": "Unbekannt"
+                      },
+                      "warning": {
+                        "text": "Warnung"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Ereignis"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "auth_failure": {
+                        "text": "Anmeldung fehlgeschlagen"
+                      },
+                      "link_down": {
+                        "text": "Verbindung getrennt"
+                      },
+                      "link_up": {
+                        "text": "Verbindung aktiv"
+                      },
+                      "service_state": {
+                        "text": "Dienststatus"
+                      },
+                      "system_event": {
+                        "text": "Systemereignis"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 8,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Anzahl"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by (category,event_kind,event_priority) (count_over_time({host=\"tplink-switch\",source=\"tplink_syslog\"} | json event_priority=\"priority\",event_kind=\"event_type\" | __error__=\"\" | keep category,event_kind,event_priority [$__range]))",
+          "legendFormat": "",
+          "maxLines": 300,
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Ereignistypen · Anzahl nach Kategorie und Stufe",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "indexByName": {
+              "Value": 3,
+              "category": 0,
+              "event_kind": 1,
+              "event_priority": 2
+            },
+            "renameByName": {
+              "Value": "Anzahl",
+              "category": "Kategorie",
+              "event_kind": "Ereignis",
+              "event_priority": "Stufe"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Zeitpunkt, Kategorie und vom Gerät gemeldete Priorität. Die Systemmeldungen werden bei der Erfassung kategorisiert.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            }
+          },
+          "noValue": "Keine empfangenen Warnungen oder Fehler im gewählten Zeitraum"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kategorie"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "authentication": {
+                        "text": "Anmeldung"
+                      },
+                      "hardware": {
+                        "text": "Hardware"
+                      },
+                      "interfaces": {
+                        "text": "Anschlüsse"
+                      },
+                      "network": {
+                        "text": "Netzwerk"
+                      },
+                      "security": {
+                        "text": "Sicherheit"
+                      },
+                      "switching": {
+                        "text": "Switching"
+                      },
+                      "system": {
+                        "text": "System"
+                      },
+                      "unknown": {
+                        "text": "Unbekannt"
+                      },
+                      "wireless": {
+                        "text": "WLAN"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Syslog-Priorität"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "alert": {
+                        "text": "Alarm"
+                      },
+                      "critical": {
+                        "text": "Kritisch"
+                      },
+                      "debug": {
+                        "text": "Debug"
+                      },
+                      "emergency": {
+                        "text": "Notfall"
+                      },
+                      "error": {
+                        "text": "Fehler"
+                      },
+                      "info": {
+                        "text": "Information"
+                      },
+                      "notice": {
+                        "text": "Hinweis"
+                      },
+                      "unknown": {
+                        "text": "Unbekannt"
+                      },
+                      "warning": {
+                        "text": "Warnung"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Ereignis"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "auth_failure": {
+                        "text": "Anmeldung fehlgeschlagen"
+                      },
+                      "link_down": {
+                        "text": "Verbindung getrennt"
+                      },
+                      "link_up": {
+                        "text": "Verbindung aktiv"
+                      },
+                      "service_state": {
+                        "text": "Dienststatus"
+                      },
+                      "system_event": {
+                        "text": "Systemereignis"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 9,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Zeit"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host=\"tplink-switch\",source=\"tplink_syslog\"} | json event_priority=\"priority\",event_kind=\"event_type\" | __error__=\"\" | event_priority=~\"emergency|alert|critical|error|warning\"",
+          "legendFormat": "",
+          "maxLines": 300,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Fehler und Warnungen · einzelne Ereignisse",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "json",
+            "keepTime": true,
+            "replace": true,
+            "source": "Line"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "event_ns": true,
+              "id": true,
+              "labels": true,
+              "timestamp": true,
+              "tsNs": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "category": 1,
+              "event_type": 2,
+              "priority": 3
+            },
+            "renameByName": {
+              "Time": "Zeit",
+              "category": "Kategorie",
+              "event_type": "Ereignis",
+              "priority": "Syslog-Priorität"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_MON_LOKI}"
+      },
+      "description": "Aufbereitet nach Empfangszeit, Kategorie, Ereignis und Syslog-Priorität.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            }
+          },
+          "noValue": "Keine Meldungen im gewählten Zeitraum"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kategorie"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "authentication": {
+                        "text": "Anmeldung"
+                      },
+                      "hardware": {
+                        "text": "Hardware"
+                      },
+                      "interfaces": {
+                        "text": "Anschlüsse"
+                      },
+                      "network": {
+                        "text": "Netzwerk"
+                      },
+                      "security": {
+                        "text": "Sicherheit"
+                      },
+                      "switching": {
+                        "text": "Switching"
+                      },
+                      "system": {
+                        "text": "System"
+                      },
+                      "unknown": {
+                        "text": "Unbekannt"
+                      },
+                      "wireless": {
+                        "text": "WLAN"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Syslog-Priorität"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "alert": {
+                        "text": "Alarm"
+                      },
+                      "critical": {
+                        "text": "Kritisch"
+                      },
+                      "debug": {
+                        "text": "Debug"
+                      },
+                      "emergency": {
+                        "text": "Notfall"
+                      },
+                      "error": {
+                        "text": "Fehler"
+                      },
+                      "info": {
+                        "text": "Information"
+                      },
+                      "notice": {
+                        "text": "Hinweis"
+                      },
+                      "unknown": {
+                        "text": "Unbekannt"
+                      },
+                      "warning": {
+                        "text": "Warnung"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Ereignis"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "auth_failure": {
+                        "text": "Anmeldung fehlgeschlagen"
+                      },
+                      "link_down": {
+                        "text": "Verbindung getrennt"
+                      },
+                      "link_up": {
+                        "text": "Verbindung aktiv"
+                      },
+                      "service_state": {
+                        "text": "Dienststatus"
+                      },
+                      "system_event": {
+                        "text": "Systemereignis"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 36
+      },
+      "id": 6,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Zeit"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_MON_LOKI}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{host=\"tplink-switch\",source=\"tplink_syslog\"}",
+          "legendFormat": "",
+          "maxLines": 300,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Systemmeldungen",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "json",
+            "keepTime": true,
+            "replace": true,
+            "source": "Line"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "event_ns": true,
+              "id": true,
+              "labels": true,
+              "timestamp": true,
+              "tsNs": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "category": 1,
+              "event_type": 2,
+              "priority": 3
+            },
+            "renameByName": {
+              "Time": "Zeit",
+              "category": "Kategorie",
+              "event_type": "Ereignis",
+              "priority": "Syslog-Priorität"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 48
+      },
+      "id": 100,
+      "panels": [],
+      "title": "Anschlüsse · SNMP-Details",
+      "type": "row"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 49
+      },
+      "id": 101,
+      "options": {
+        "content": "**Port oben auswählen.** Die Übersicht zeigt alle acht bestätigten physischen Anschlüsse. Die Detaildiagramme folgen der Auswahl; Empfang und Senden bleiben getrennt. Systemmeldungen beziehen sich auf den gesamten Switch.",
+        "mode": "markdown"
+      },
+      "title": "TP-Link SX3008F · Anschlüsse",
+      "type": "text"
+    },
+    {
+      "description": "Erreichbarkeit des Telegraf-Exporters; kein Beleg für einen erfolgreichen SNMP-Abruf des Switches.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Sammler erreichbar",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "Nicht erreichbar"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "Erreichbar"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 52
+      },
+      "id": 102,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "min(up{job=\"telegraf-dashboard\",host=\"dashboard\"})",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "Sammler erreichbar",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Sammler erreichbar",
+      "type": "stat"
+    },
+    {
+      "description": "Mindestens zwei verschiedene Uptime-Messwerte in zwei Minuten, erreichbarer Exporter und vorhandene aktuelle Portdaten. Cache-Expiration ist mit 90 Sekunden vorgesehen.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "SNMP-Daten aktuell",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "text": "Kein Fortschritt"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "Aktuell"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 52
+      },
+      "id": 115,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m])) > bool 0) and on() (min(up{job=\"telegraf-dashboard\",host=\"dashboard\"}) == 1) and on() (count(max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "SNMP-Daten aktuell",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "SNMP-Daten aktuell",
+      "type": "stat"
+    },
+    {
+      "description": "Anzahl der aktuell gelieferten Interface-Statusreihen, keine angenommene Zahl physischer Ports.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Ports mit Messwerten",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 52
+      },
+      "id": 116,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count(max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "Ports mit Messwerten",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Ports mit Messwerten",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "${port:text} · Betrieb",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "1": {
+                  "color": "green",
+                  "text": "Verbunden"
+                },
+                "2": {
+                  "color": "gray",
+                  "text": "Kein Link"
+                },
+                "3": {
+                  "color": "orange",
+                  "text": "Test"
+                },
+                "4": {
+                  "color": "gray",
+                  "text": "Unbekannt"
+                },
+                "5": {
+                  "color": "gray",
+                  "text": "Wartend"
+                },
+                "6": {
+                  "color": "gray",
+                  "text": "Nicht vorhanden"
+                },
+                "7": {
+                  "color": "orange",
+                  "text": "Unterliegende Verbindung aus"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 12,
+        "y": 52
+      },
+      "id": 103,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "Anschluss · Betrieb",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "${port:text} · Betrieb",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "${port:text} · Freigabe",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "1": {
+                  "color": "blue",
+                  "text": "Freigegeben"
+                },
+                "2": {
+                  "color": "gray",
+                  "text": "Deaktiviert"
+                },
+                "3": {
+                  "color": "orange",
+                  "text": "Test"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 52
+      },
+      "id": 104,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(max by(index) ((tplink_sx3008f_port_admin_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_admin_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_admin_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "Anschluss · Freigabe",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "${port:text} · Freigabe",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "${port:text} · Linkrate",
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "color": "gray",
+                  "text": "Keine Rate gemeldet"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 52
+      },
+      "id": 105,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 18,
+          "valueSize": 38
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "Anschluss · Linkrate",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "${port:text} · Linkrate",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 57
+      },
+      "id": 106,
+      "panels": [],
+      "title": "Alle gemeldeten Anschlüsse",
+      "type": "row"
+    },
+    {
+      "description": "Portnummern entsprechen der bestätigten Zuordnung am Gerät. Die gemeldete Linkrate und Empfang/Senden bleiben getrennte Werte. Fehlende oder null Linkrate ergibt keine prozentuale Auslastung.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Betrieb"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "gray",
+                        "text": "Keine Daten"
+                      }
+                    },
+                    "type": "special"
+                  },
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "text": "Verbunden"
+                      },
+                      "2": {
+                        "color": "gray",
+                        "text": "Kein Link"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "text": "Test"
+                      },
+                      "4": {
+                        "color": "gray",
+                        "text": "Unbekannt"
+                      },
+                      "5": {
+                        "color": "gray",
+                        "text": "Wartend"
+                      },
+                      "6": {
+                        "color": "gray",
+                        "text": "Nicht vorhanden"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "text": "Unterliegende Verbindung aus"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Freigabe"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "gray",
+                        "text": "Keine Daten"
+                      }
+                    },
+                    "type": "special"
+                  },
+                  {
+                    "options": {
+                      "1": {
+                        "color": "blue",
+                        "text": "Freigegeben"
+                      },
+                      "2": {
+                        "color": "gray",
+                        "text": "Deaktiviert"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "text": "Test"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Linkrate"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bps"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfang"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bps"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Senden"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bps"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Empfang %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Senden %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Anschluss"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "49153": {
+                        "text": "Port 1"
+                      },
+                      "49154": {
+                        "text": "Port 2"
+                      },
+                      "49155": {
+                        "text": "Port 3"
+                      },
+                      "49156": {
+                        "text": "Port 4"
+                      },
+                      "49157": {
+                        "text": "Port 5"
+                      },
+                      "49158": {
+                        "text": "Port 6"
+                      },
+                      "49159": {
+                        "text": "Port 7"
+                      },
+                      "49160": {
+                        "text": "Port 8"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 58
+      },
+      "id": 107,
+      "options": {
+        "cellHeight": "md",
+        "footer": {
+          "show": false
+        },
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace(max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))),\"port_field\",\"Betrieb\",\"index\",\".*\") or label_replace(max by(index) ((tplink_sx3008f_port_admin_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_admin_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_admin_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))),\"port_field\",\"Freigabe\",\"index\",\".*\") or label_replace((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))),\"port_field\",\"Linkrate\",\"index\",\".*\") or label_replace(((8 * max by(index) ((rate(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) and on(index) (max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))) == 1) and on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0)),\"port_field\",\"Empfang\",\"index\",\".*\") or label_replace(((8 * max by(index) ((rate(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) and on(index) (max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))) == 1) and on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0)),\"port_field\",\"Senden\",\"index\",\".*\") or label_replace((100 * ((8 * max by(index) ((rate(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) and on(index) (max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))) == 1) and on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0)) / on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0)),\"port_field\",\"Empfang %\",\"index\",\".*\") or label_replace((100 * ((8 * max by(index) ((rate(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) and on(index) (max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))) == 1) and on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0)) / on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0)),\"port_field\",\"Senden %\",\"index\",\".*\")",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "{{port_field}}",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Anschlussübersicht · Status und Verkehr",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "keepLabels": [
+              "index",
+              "port_field"
+            ],
+            "mode": "columns",
+            "valueLabel": "port_field"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "measure": true,
+              "port_field": true
+            },
+            "indexByName": {
+              "Betrieb": 1,
+              "Empfang": 4,
+              "Empfang %": 6,
+              "Freigabe": 2,
+              "Linkrate": 3,
+              "Senden": 5,
+              "Senden %": 7,
+              "index": 0
+            },
+            "renameByName": {
+              "index": "Anschluss"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 71
+      },
+      "id": 108,
+      "panels": [],
+      "title": "${port:text} · Verlauf",
+      "type": "row"
+    },
+    {
+      "description": "Counter64-Oktettenraten über fünf Minuten, mit 8 in Bit/s umgerechnet. Kein Summieren beider Richtungen als Gesamtverkehr.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisSoftMin": 0,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 72
+      },
+      "id": 109,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((8 * max by(index) ((rate(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) and on(index) (max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))) == 1) and on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfang",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((8 * max by(index) ((rate(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) and on(index) (max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))) == 1) and on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "${port:text} · Empfang und Senden",
+      "type": "timeseries"
+    },
+    {
+      "description": "Je Richtung Bit/s geteilt durch die positive gemeldete Linkrate. Vollduplex-Richtungen werden nicht addiert; Null oder fehlende Linkrate ergeben keine Prozentzahl.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisSoftMax": 100,
+            "axisSoftMin": 0,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 72
+      },
+      "id": 110,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * ((8 * max by(index) ((rate(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_in_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) and on(index) (max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))) == 1) and on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0)) / on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Empfang",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(100 * ((8 * max by(index) ((rate(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_out_octets_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) and on(index) (max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))) == 1) and on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0)) / on(index) ((1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))) > 0))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Senden",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "${port:text} · Linkauslastung",
+      "type": "timeseries"
+    },
+    {
+      "description": "Zählerraten getrennt nach Eingang und Ausgang. Eine Verlustrate in Prozent wird daraus nicht abgeleitet.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisSoftMin": 0,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 81
+      },
+      "id": 111,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(index) ((rate(tplink_sx3008f_port_in_errors_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_in_errors_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_in_errors_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Eingang",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(index) ((rate(tplink_sx3008f_port_out_errors_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_out_errors_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_out_errors_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Ausgang",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "${port:text} · Paketfehler",
+      "type": "timeseries"
+    },
+    {
+      "description": "Discards getrennt nach Eingang und Ausgang; die Ursache wird von diesen Zählern nicht belegt.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisSoftMin": 0,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 81
+      },
+      "id": 112,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(index) ((rate(tplink_sx3008f_port_in_discards_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_in_discards_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_in_discards_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Eingang",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(index) ((rate(tplink_sx3008f_port_out_discards_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"}[5m]) and ((time()-timestamp(tplink_sx3008f_port_out_discards_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_out_discards_total{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Ausgang",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "${port:text} · Discards",
+      "type": "timeseries"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "1": {
+                  "color": "green",
+                  "text": "Verbunden"
+                },
+                "2": {
+                  "color": "gray",
+                  "text": "Kein Link"
+                },
+                "3": {
+                  "color": "orange",
+                  "text": "Test"
+                },
+                "4": {
+                  "color": "gray",
+                  "text": "Unbekannt"
+                },
+                "5": {
+                  "color": "gray",
+                  "text": "Wartend"
+                },
+                "6": {
+                  "color": "gray",
+                  "text": "Nicht vorhanden"
+                },
+                "7": {
+                  "color": "orange",
+                  "text": "Unterliegende Verbindung aus"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Freigabe"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "gray",
+                        "text": "Keine Daten"
+                      }
+                    },
+                    "type": "special"
+                  },
+                  {
+                    "options": {
+                      "1": {
+                        "color": "blue",
+                        "text": "Freigegeben"
+                      },
+                      "2": {
+                        "color": "gray",
+                        "text": "Deaktiviert"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "text": "Test"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 90
+      },
+      "id": 113,
+      "options": {
+        "alignValue": "center",
+        "legend": {
+          "showLegend": false
+        },
+        "mergeValues": true,
+        "rowHeight": 0.8,
+        "showValue": "auto",
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(index) ((tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_oper_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Betrieb",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(index) ((tplink_sx3008f_port_admin_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_admin_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_admin_status{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0)))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Freigabe",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "${port:text} · Statusverlauf",
+      "type": "state-timeline"
+    },
+    {
+      "description": "Gemeldete Anschlussrate aus ifHighSpeed in Mbit/s, mit 1000000 in Bit/s umgerechnet; kein gemessener Nutzdurchsatz.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisSoftMin": 0,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "lineWidth": 2,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "gray",
+                  "text": "Keine Daten"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "Keine Daten",
+          "unit": "bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 90
+      },
+      "id": 114,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MON_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(1000000 * max by(index) ((tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"} and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) >= 0) and ((time()-timestamp(tplink_sx3008f_port_speed_mbps{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\",index=~\"${port:regex}\"})) < 180) and on() (max(changes(tplink_sx3008f_poll_uptime_ticks{job=\"telegraf-dashboard\",host=\"dashboard\",device=\"sx3008f\"}[2m]) and on(job,host) (up{job=\"telegraf-dashboard\",host=\"dashboard\"} == 1)) > 0))))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Linkrate",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "${port:text} · Linkrate",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 42,
+  "tags": [
+    "monitoring",
+    "syslog"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "includeAll": false,
+        "label": "Anschluss (SNMP-Index)",
+        "multi": false,
+        "name": "port",
+        "options": [],
+        "query": "Port 1 : 49153, Port 2 : 49154, Port 3 : 49155, Port 4 : 49156, Port 5 : 49157, Port 6 : 49158, Port 7 : 49159, Port 8 : 49160",
+        "refresh": 0,
+        "sort": 0,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "TP-Link SX3008F · Anschlüsse und System",
+  "weekStart": "",
+  "id": null,
+  "uid": "mon-tplink-sx3008f",
+  "version": 0,
+  "__inputs": [
+    {
+      "name": "DS_MON_LOKI",
+      "label": "Loki · mon-loki",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "loki",
+      "pluginName": "Loki"
+    },
+    {
+      "name": "DS_MON_PROMETHEUS",
+      "label": "Prometheus · mon-prometheus",
+      "description": "Eigene Datenquelle beim Import auswählen; keine Verbindungsdaten enthalten.",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ]
+}
